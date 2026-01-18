@@ -1,0 +1,62 @@
+import React from "react";
+import { Fingerprint, Globe } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+
+  return (
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50">
+      <div className="glass-panel rounded-full px-4 sm:px-6 py-3 flex items-center justify-between shadow-xl shadow-black/40">
+        {/* Logo */}
+        <div
+          className="flex items-center gap-3 group cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-background transform group-hover:rotate-12 transition-transform">
+            <Fingerprint size={20} strokeWidth={2.5} />
+          </div>
+          <span className="text-xl font-bold tracking-tight hidden sm:block">
+            BioProfile
+          </span>
+        </div>
+
+        {/* Links */}
+        <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          {["Features", "Pricing", "Showcase"].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              className="text-sm font-medium text-muted hover:text-primary transition-colors duration-200"
+            >
+              {item}
+            </a>
+          ))}
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          <button className="hidden sm:flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-white transition-colors">
+            <Globe size={14} />
+            <span>EN</span>
+          </button>
+          <div className="hidden sm:block h-4 w-px bg-white/10 mx-1"></div>
+          <button
+            onClick={() => navigate("/custom")}
+            className="hidden sm:block text-sm font-semibold hover:text-primary transition-colors px-2"
+          >
+            Dashboard
+          </button>
+          <button
+            onClick={() => navigate("/custom")}
+            className="bg-primary text-background text-sm font-bold px-4 sm:px-6 py-2 sm:py-2.5 rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(0,212,255,0.3)]"
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

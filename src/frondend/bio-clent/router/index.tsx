@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import { MainLayout } from "../layouts";
+import ErrorBoundary from "../components/ErrorBoundary";
 import {
+  HomePage,
   CustomPage,
   LinksPage,
   ShopPage,
@@ -11,31 +13,72 @@ import {
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: <HomePage />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/custom",
     element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
         element: <CustomPage />,
       },
+    ],
+  },
+  {
+    path: "/links",
+    element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
       {
-        path: "custom",
-        element: <CustomPage />,
-      },
-      {
-        path: "links",
+        index: true,
         element: <LinksPage />,
       },
+    ],
+  },
+  {
+    path: "/shop",
+    element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
       {
-        path: "shop",
+        index: true,
         element: <ShopPage />,
       },
+    ],
+  },
+  {
+    path: "/analytics",
+    element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
       {
-        path: "analytics",
+        index: true,
         element: <AnalyticsPage />,
       },
+    ],
+  },
+  {
+    path: "/settings",
+    element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
       {
-        path: "settings",
+        index: true,
         element: <SettingsPage />,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        index: true,
+        element: <CustomPage />,
       },
     ],
   },
