@@ -1,0 +1,5 @@
+{
+  "name": "NeonCard - Profile Customization Dashboard",
+  "description": "A high-fidelity React dashboard for customizing link-in-bio profiles, featuring a modular layout with Sidebar, Property Panel, and a central Canvas placeholder.",
+  "requestFramePermissions": []
+}
