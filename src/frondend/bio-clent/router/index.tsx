@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/analytics",
+    path: "/dashboard",
     element: <MainLayout />,
     errorElement: <ErrorBoundary />,
     children: [
@@ -72,13 +72,13 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard",
+    path: "/analytics",
     element: <MainLayout />,
     errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
-        element: <CustomPage />,
+        element: <AnalyticsPage />,
       },
     ],
   },

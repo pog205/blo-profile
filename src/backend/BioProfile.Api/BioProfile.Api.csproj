@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SystemDesign.Application\SystemDesign.Application.csproj" />
-    <ProjectReference Include="..\SystemDesign.Infrastructure\SystemDesign.Infrastructure.csproj" />
+    <ProjectReference Include="..\BioProfile.Application\BioProfile.Application.csproj" />
+    <ProjectReference Include="..\BioProfile.Infrastructure\BioProfile.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

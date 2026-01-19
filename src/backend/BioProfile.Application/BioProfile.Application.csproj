@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SystemDesign.Domain\SystemDesign.Domain.csproj" />
+    <ProjectReference Include="..\BioProfile.Domain\BioProfile.Domain.csproj" />
   </ItemGroup>
 
 </Project>

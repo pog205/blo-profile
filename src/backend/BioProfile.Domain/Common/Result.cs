@@ -1,4 +1,4 @@
-namespace SystemDesign.Domain.Common;
+namespace BioProfile.Domain.Common;
 
 /// <summary>
 /// Result pattern for operations that can fail.

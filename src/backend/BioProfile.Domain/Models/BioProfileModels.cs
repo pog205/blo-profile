@@ -113,7 +113,7 @@ public record BioProfile(
 /// <summary>
 /// BioProfile entity with metadata for persistence.
 /// </summary>
-public record BioProfileEntity(
+public record BioProfileDataRecord(
     Guid Id,
     string UserId,
     ProfileSettings Profile,
@@ -162,11 +162,11 @@ public static class BioProfileExtensions
     }
 
     /// <summary>
-    /// Creates BioProfileEntity from BioProfile with metadata.
+    /// Creates BioProfileDataRecord from BioProfile with metadata.
     /// </summary>
-    public static BioProfileEntity ToEntity(this BioProfile bioProfile, Guid id, string userId, int views = 0)
+    public static BioProfileDataRecord ToDataRecord(this BioProfile bioProfile, Guid id, string userId, int views = 0)
     {
-        return new BioProfileEntity(
+        return new BioProfileDataRecord(
             id,
             userId,
             bioProfile.Profile,
@@ -237,9 +237,9 @@ public static class BioProfileDtoExtensions
     }
 
     /// <summary>
-    /// Converts BioProfileEntity to BioProfileResponse.
+    /// Converts BioProfileDataRecord to BioProfileResponse.
     /// </summary>
-    public static BioProfileResponse ToResponse(this BioProfileEntity entity)
+    public static BioProfileResponse ToResponse(this BioProfileDataRecord entity)
     {
         return new BioProfileResponse(
             entity.Id,

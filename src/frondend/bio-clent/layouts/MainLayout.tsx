@@ -10,6 +10,8 @@ const MainLayout: React.FC = () => {
       case "/":
       case "/custom":
         return "Customization";
+      case "/dashboard":
+        return "Dashboard";
       case "/links":
         return "Social Links";
       case "/shop":
