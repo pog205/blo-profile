@@ -1,23 +1,46 @@
 import React from "react";
 import { Fingerprint, MessageSquare, Send, Globe, Github } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation();
+
   const footerLinks = [
     {
-      title: "Product",
-      links: ["Features", "Pricing", "Showcase", "Changelog"],
+      title: t("shop.footer.product"),
+      links: [
+        t("shop.footer.features"),
+        t("shop.footer.pricing"),
+        t("shop.footer.showcase"),
+        t("shop.footer.changelog"),
+      ],
     },
     {
-      title: "Company",
-      links: ["About", "Careers", "Blog", "Contact"],
+      title: t("shop.footer.company"),
+      links: [
+        t("shop.footer.about"),
+        t("shop.footer.careers"),
+        t("shop.footer.blog"),
+        t("shop.footer.contact"),
+      ],
     },
     {
-      title: "Resources",
-      links: ["Help Center", "API Docs", "Community", "Status"],
+      title: t("shop.footer.resources"),
+      links: [
+        t("shop.footer.helpCenter"),
+        t("shop.footer.apiDocs"),
+        t("shop.footer.community"),
+        t("shop.footer.status"),
+      ],
     },
     {
-      title: "Legal",
-      links: ["Privacy", "Terms", "Security", "Cookies"],
+      title: t("shop.footer.legal"),
+      links: [
+        t("shop.footer.privacy"),
+        t("shop.footer.terms"),
+        t("shop.footer.security"),
+        t("shop.footer.cookies"),
+      ],
     },
   ];
 
@@ -31,11 +54,12 @@ const Footer: React.FC = () => {
               <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-background">
                 <Fingerprint size={24} strokeWidth={2.5} />
               </div>
-              <span className="text-2xl font-bold">BioProfile</span>
+              <span className="text-2xl font-bold">
+                {t("shop.footer.brandName")}
+              </span>
             </div>
             <p className="text-muted text-base leading-relaxed max-w-sm">
-              The modern standard for digital identity. Built for the future of
-              the creator economy. Join thousands of creators today.
+              {t("shop.footer.brandDesc")}
             </p>
             <div className="flex gap-4">
               {[MessageSquare, Send, Globe, Github].map((Icon, idx) => (
@@ -75,12 +99,12 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-muted text-sm font-medium order-2 md:order-1">
-            © {new Date().getFullYear()} Bio Profile Inc. All rights reserved.
+            {t("shop.footer.copyright")}
           </p>
           <div className="flex items-center gap-8 order-1 md:order-2">
             <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold border border-emerald-500/20 shadow-lg shadow-emerald-500/5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              All systems operational
+              {t("shop.footer.systemStatus")}
             </div>
           </div>
         </div>

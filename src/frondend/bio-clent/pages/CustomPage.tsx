@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Palette,
   Image as ImageIcon,
@@ -37,8 +38,9 @@ const ColorInput: React.FC<{
 );
 
 const CustomPage: React.FC = () => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<ProfileState>({
-    description: "this is my description",
+    description: t("custom.defaultDescription"),
     backgroundEffect: "None",
     profileOpacity: 50,
     profileBlur: 20,
@@ -61,7 +63,7 @@ const CustomPage: React.FC = () => {
         <div className="flex items-center gap-2 mb-6">
           <ImageIcon className="size-5 text-blue-400" />
           <h3 className="text-sm font-bold text-white uppercase tracking-widest">
-            Assets Uploader
+            {t("custom.assetsUploader")}
           </h3>
         </div>
         <AssetUploader />
@@ -73,14 +75,14 @@ const CustomPage: React.FC = () => {
           <div className="flex items-center gap-2 mb-2">
             <Palette className="size-5 text-purple-400" />
             <h3 className="text-sm font-bold text-white uppercase tracking-widest">
-              General Settings
+              {t("custom.generalSettings")}
             </h3>
           </div>
 
           <div className="space-y-6">
             <div className="space-y-2">
               <label className="text-xs font-semibold text-slate-400 uppercase">
-                Description
+                {t("custom.description")}
               </label>
               <div className="relative">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 italic font-serif text-lg leading-none">
@@ -91,14 +93,14 @@ const CustomPage: React.FC = () => {
                   value={profile.description}
                   onChange={(e) => updateProfile("description", e.target.value)}
                   className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 transition-all text-white"
-                  placeholder="Enter a description..."
+                  placeholder={t("custom.descriptionPlaceholder")}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
               <label className="text-xs font-semibold text-slate-400 uppercase">
-                Background Effects
+                {t("custom.backgroundEffects")}
               </label>
               <div className="relative">
                 <Sparkles className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
@@ -109,11 +111,19 @@ const CustomPage: React.FC = () => {
                   }
                   className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm appearance-none focus:outline-none focus:border-blue-500/50 text-white"
                 >
-                  <option>None</option>
-                  <option>Rain Drops</option>
-                  <option>Starfield</option>
-                  <option>Matrix Code</option>
-                  <option>Floating Orbs</option>
+                  <option value="None">{t("custom.effects.none")}</option>
+                  <option value="Rain Drops">
+                    {t("custom.effects.rainDrops")}
+                  </option>
+                  <option value="Starfield">
+                    {t("custom.effects.starfield")}
+                  </option>
+                  <option value="Matrix Code">
+                    {t("custom.effects.matrixCode")}
+                  </option>
+                  <option value="Floating Orbs">
+                    {t("custom.effects.floatingOrbs")}
+                  </option>
                 </select>
               </div>
             </div>
@@ -122,7 +132,7 @@ const CustomPage: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-semibold text-slate-400 uppercase">
-                    Profile Opacity
+                    {t("custom.profileOpacity")}
                   </label>
                   <span className="text-xs text-blue-400 font-mono">
                     {profile.profileOpacity}%
@@ -142,7 +152,7 @@ const CustomPage: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-semibold text-slate-400 uppercase">
-                    Profile Blur
+                    {t("custom.profileBlur")}
                   </label>
                   <span className="text-xs text-blue-400 font-mono">
                     {profile.profileBlur}px
@@ -163,7 +173,7 @@ const CustomPage: React.FC = () => {
 
             <div className="space-y-2">
               <label className="text-xs font-semibold text-slate-400 uppercase">
-                Location
+                {t("custom.location")}
               </label>
               <div className="relative">
                 <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
@@ -172,7 +182,7 @@ const CustomPage: React.FC = () => {
                   value={profile.location}
                   onChange={(e) => updateProfile("location", e.target.value)}
                   className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white"
-                  placeholder="San Francisco, CA"
+                  placeholder={t("custom.locationPlaceholder")}
                 />
               </div>
             </div>
@@ -184,45 +194,31 @@ const CustomPage: React.FC = () => {
           <div className="flex items-center gap-2 mb-2">
             <Droplets className="size-5 text-emerald-400" />
             <h3 className="text-sm font-bold text-white uppercase tracking-widest">
-              Colors & Theme
+              {t("custom.colorsTheme")}
             </h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <ColorInput
-              label="Accent"
+              label={t("custom.accent")}
               value={profile.accentColor}
               onChange={(v) => updateProfile("accentColor", v)}
             />
             <ColorInput
-              label="Text"
+              label={t("custom.text")}
               value={profile.textColor}
               onChange={(v) => updateProfile("textColor", v)}
             />
             <ColorInput
-              label="Background"
+              label={t("custom.background")}
               value={profile.backgroundColor}
               onChange={(v) => updateProfile("backgroundColor", v)}
             />
             <ColorInput
-              label="Icons"
+              label={t("custom.icons")}
               value={profile.iconColor}
               onChange={(v) => updateProfile("iconColor", v)}
             />
-          </div>
-
-          <div className="pt-4">
-            <button className="w-full py-4 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 border border-blue-500/30 rounded-2xl text-sm font-bold text-blue-200 hover:from-blue-600/30 transition-all shadow-xl shadow-blue-900/10 uppercase tracking-widest">
-              Unlock Premium Gradients
-            </button>
-          </div>
-
-          <div className="flex items-center gap-3 p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-xl">
-            <Lock className="size-4 text-yellow-500 shrink-0" />
-            <p className="text-[11px] text-yellow-500/80 leading-relaxed font-medium">
-              Connect your Discord to enable real-time status and activity
-              presence on your profile.
-            </p>
           </div>
         </section>
       </div>

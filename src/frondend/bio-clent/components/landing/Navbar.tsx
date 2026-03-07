@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useI18n } from "../../i18n";
 
 interface LanguageOption {
@@ -11,6 +12,7 @@ interface LanguageOption {
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { language, setLanguage } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -59,13 +61,17 @@ const Navbar: React.FC = () => {
 
         {/* Links */}
         <div className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
-          {["Features", "Pricing", "Showcase"].map((item) => (
+          {[
+            { key: "features", label: t("landing.features") },
+            { key: "pricing", label: t("landing.pricing") },
+            { key: "showcase", label: t("landing.showcase") },
+          ].map((item) => (
             <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+              key={item.key}
+              href={`#${item.key}`}
               className="text-sm font-medium text-muted hover:text-primary transition-colors duration-200"
             >
-              {item}
+              {item.label}
             </a>
           ))}
         </div>
@@ -108,13 +114,15 @@ const Navbar: React.FC = () => {
             onClick={() => navigate("/dashboard")}
             className="hidden sm:block text-sm font-semibold hover:text-primary transition-colors px-2"
           >
-            Dashboard
+            {t("nav.dashboard")}
           </button>
           <button
-            onClick={() => navigate("/auth")}
+            onClick={() =>
+              navigate(localStorage.getItem("token") ? "/custom" : "/auth")
+            }
             className="bg-primary text-background text-sm font-bold px-4 sm:px-6 py-2 sm:py-2.5 rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(0,212,255,0.3)]"
           >
-            Get Started
+            {t("landing.getStarted")}
           </button>
         </div>
       </div>

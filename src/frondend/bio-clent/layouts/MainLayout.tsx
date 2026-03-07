@@ -1,27 +1,29 @@
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Sidebar from "../components/Sidebar";
 
 const MainLayout: React.FC = () => {
   const location = useLocation();
+  const { t } = useTranslation();
 
   const getPageTitle = () => {
     switch (location.pathname) {
       case "/":
       case "/custom":
-        return "Customization";
+        return t("header.customization");
       case "/dashboard":
-        return "Dashboard";
+        return t("header.dashboard");
       case "/links":
-        return "Social Links";
+        return t("header.socialLinks");
       case "/shop":
-        return "E-commerce";
+        return t("header.ecommerce");
       case "/analytics":
-        return "Analytics";
+        return t("header.analytics");
       case "/settings":
-        return "Settings";
+        return t("header.settings");
       default:
-        return "Dashboard";
+        return t("header.dashboard");
     }
   };
 
@@ -37,7 +39,7 @@ const MainLayout: React.FC = () => {
           <h2 className="text-lg font-semibold text-white">{getPageTitle()}</h2>
           <div className="flex items-center gap-4">
             <button className="px-4 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-500 transition-colors shadow-lg shadow-blue-900/20">
-              Save Changes
+              {t("common.save")}
             </button>
           </div>
         </header>

@@ -1,5 +1,6 @@
 import React from "react";
 import { User, Link2, Share2, ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const StepCard: React.FC<{
   icon: React.ReactNode;
@@ -41,6 +42,7 @@ const StepCard: React.FC<{
 };
 
 const HowItWorks: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <section
       className="relative py-24 px-6 md:px-20 bg-background"
@@ -50,11 +52,10 @@ const HowItWorks: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
           <div className="max-w-xl">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-              How it Works
+              {t("shop.howItWorks")}
             </h2>
             <p className="text-muted text-lg md:text-xl">
-              Three simple steps to establish your unified digital presence. No
-              coding required.
+              {t("shop.howItWorksDesc")}
             </p>
           </div>
           <div className="pb-2">
@@ -62,7 +63,7 @@ const HowItWorks: React.FC = () => {
               href="#"
               className="text-primary hover:text-accent font-bold inline-flex items-center gap-2 group transition-colors text-lg"
             >
-              View all features
+              {t("shop.viewAllFeatures")}
               <ArrowRight
                 size={20}
                 className="group-hover:translate-x-1 transition-transform"
@@ -74,24 +75,24 @@ const HowItWorks: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <StepCard
             icon={<User size={28} />}
-            title="Personalize"
-            description="Customize your profile to match your unique brand identity with custom themes, fonts, and layouts."
+            title={t("shop.personalize")}
+            description={t("shop.personalizeDesc")}
             imgSrc="https://picsum.photos/seed/p1/400/300"
             glowColor="bg-primary"
             iconColor="text-primary"
           />
           <StepCard
             icon={<Link2 size={28} />}
-            title="Connect"
-            description="Aggregate all your important links, music, videos, and social profiles in one secure, accessible place."
+            title={t("shop.connect")}
+            description={t("shop.connectDesc")}
             imgSrc="https://picsum.photos/seed/p2/400/300"
             glowColor="bg-accent"
             iconColor="text-accent"
           />
           <StepCard
             icon={<Share2 size={28} />}
-            title="Share"
-            description="Share your unique bio link across Instagram, TikTok, Twitter, and everywhere else you exist online."
+            title={t("shop.share")}
+            description={t("shop.shareDesc")}
             imgSrc="https://picsum.photos/seed/p3/400/300"
             glowColor="bg-purple-500"
             iconColor="text-white"

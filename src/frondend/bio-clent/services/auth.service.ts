@@ -19,12 +19,10 @@ interface RegisterRequest {
 
 interface AuthResponse {
   token: string;
-  refreshToken?: string;
-  user: {
-    id: string;
-    email: string;
-    username: string;
-  };
+  refreshToken: string;
+  expiration: string;
+  username: string;
+  email: string;
 }
 
 export const authService = {
@@ -44,6 +42,10 @@ export const authService = {
       if (response.refreshToken) {
         localStorage.setItem('refreshToken', response.refreshToken);
       }
+      localStorage.setItem('user', JSON.stringify({
+        username: response.username,
+        email: response.email,
+      }));
     }
     
     return response;
@@ -62,6 +64,10 @@ export const authService = {
     // Auto login sau khi register
     if (response.token) {
       localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify({
+        username: response.username,
+        email: response.email,
+      }));
     }
     
     return response;
@@ -81,6 +87,7 @@ export const authService = {
       // Xóa token dù API có lỗi
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
     }
   },
 

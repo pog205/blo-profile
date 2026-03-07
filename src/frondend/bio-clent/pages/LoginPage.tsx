@@ -30,7 +30,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigateSignup }) => {
   const loginMutation = useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
-      authToast.loginSuccess(data.user?.username);
+      authToast.loginSuccess(data.username);
       setTimeout(() => navigate("/dashboard"), 500);
     },
     onError: (error: Error) => {

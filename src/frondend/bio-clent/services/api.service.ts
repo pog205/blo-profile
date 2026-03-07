@@ -32,7 +32,7 @@ class ApiService {
         const error = await response.json().catch(() => ({
           message: response.statusText,
         }));
-        throw new Error(error.message || 'API request failed');
+        throw new Error(error.message || error.error || 'API request failed');
       }
 
       return await response.json();

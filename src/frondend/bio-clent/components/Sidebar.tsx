@@ -7,7 +7,6 @@ import {
   BarChart3,
   Settings,
   User,
-  ShoppingBag,
   ChevronLeft,
   ChevronRight,
   MoreVertical,
@@ -17,7 +16,10 @@ import {
   ChevronDown,
   LucideIcon,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useI18n } from "../i18n";
+import { authService } from "../services/auth.service";
+import { authToast } from "../utils/toast";
 
 interface NavItemConfig {
   to: string;
@@ -41,14 +43,18 @@ const Sidebar: React.FC = () => {
   const languageRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { language, setLanguage } = useI18n();
 
+  const user = JSON.parse(localStorage.getItem("user") ?? "{}");
+  const username: string = user.username ?? "User";
+  const email: string = user.email ?? "";
+
   const items: NavItemConfig[] = [
-    { to: "/dashboard", icon: BarChart3, label: "Dashboard" },
-    { to: "/custom", icon: LayoutGrid, label: "Custom" },
-    { to: "/links", icon: LinkIcon, label: "Links" },
-    { to: "/shop", icon: ShoppingBag, label: "Shop" },
-    { to: "/settings", icon: Settings, label: "Settings" },
+    { to: "/dashboard", icon: BarChart3, label: t("nav.dashboard") },
+    { to: "/custom", icon: LayoutGrid, label: t("nav.custom") },
+    { to: "/links", icon: LinkIcon, label: t("nav.links") },
+    { to: "/settings", icon: Settings, label: t("nav.settings") },
   ];
 
   const languages: LanguageOption[] = [
@@ -56,15 +62,22 @@ const Sidebar: React.FC = () => {
     { id: "vi", flag: "🇻🇳", label: "VI", fullLabel: "Tiếng Việt" },
   ];
 
-  const currentLanguage = languages.find((lang) => lang.id === language) || languages[0];
+  const currentLanguage =
+    languages.find((lang) => lang.id === language) || languages[0];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (quickMenuRef.current && !quickMenuRef.current.contains(event.target as Node)) {
+      if (
+        quickMenuRef.current &&
+        !quickMenuRef.current.contains(event.target as Node)
+      ) {
         setIsQuickMenuOpen(false);
         setIsLanguageOpen(false);
       }
-      if (languageRef.current && !languageRef.current.contains(event.target as Node)) {
+      if (
+        languageRef.current &&
+        !languageRef.current.contains(event.target as Node)
+      ) {
         setIsLanguageOpen(false);
       }
     };
@@ -77,7 +90,7 @@ const Sidebar: React.FC = () => {
     if (isQuickMenuOpen && menuButtonRef.current) {
       const buttonRect = menuButtonRef.current.getBoundingClientRect();
       const menuWidth = 224; // w-56 = 14rem = 224px
-      const left = buttonRect.left + (buttonRect.width / 2) - (menuWidth / 2);
+      const left = buttonRect.left + buttonRect.width / 2 - menuWidth / 2;
       const bottom = window.innerHeight - buttonRect.top + 8; // 8px spacing
       setMenuPosition({ bottom, left });
     }
@@ -95,23 +108,29 @@ const Sidebar: React.FC = () => {
     setIsLanguageOpen(false);
   };
 
-  const handleLogout = () => {
-    // Implement logout logic here
-    console.log("Logout clicked");
+  const handleLogout = async () => {
     setIsQuickMenuOpen(false);
+    try {
+      await authService.logout();
+    } finally {
+      authToast.logoutSuccess();
+      navigate("/auth");
+    }
   };
 
   return (
     <>
       <div
-        className={`${isCollapsed ? "w-20" : "w-64"
-          } transition-all duration-300 ease-in-out flex flex-col justify-between border-r border-white/5 bg-[#101622] p-4 shrink-0 relative`}
+        className={`${
+          isCollapsed ? "w-20" : "w-64"
+        } transition-all duration-300 ease-in-out flex flex-col justify-between border-r border-white/5 bg-[#101622] p-4 shrink-0 relative`}
       >
         <div className="flex flex-col gap-8">
           {/* Brand & Toggle */}
           <div
-            className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between"
-              } px-2 h-10`}
+            className={`flex items-center ${
+              isCollapsed ? "justify-center" : "justify-between"
+            } px-2 h-10`}
           >
             <NavLink to="/" className="flex items-center gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-600/20 text-blue-500">
@@ -135,18 +154,21 @@ const Sidebar: React.FC = () => {
                   to={item.to}
                   title={isCollapsed ? item.label : ""}
                   className={({ isActive }) =>
-                    `flex items-center ${isCollapsed ? "justify-center" : "gap-3"
-                    } rounded-lg h-12 transition-all duration-200 ${isActive
-                      ? "bg-blue-600/10 text-blue-500 ring-1 ring-blue-500/20 shadow-sm"
-                      : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    `flex items-center ${
+                      isCollapsed ? "justify-center" : "gap-3"
+                    } rounded-lg h-12 transition-all duration-200 ${
+                      isActive
+                        ? "bg-blue-600/10 text-blue-500 ring-1 ring-blue-500/20 shadow-sm"
+                        : "text-slate-400 hover:bg-white/5 hover:text-white"
                     } ${isCollapsed ? "px-0" : "px-3"}`
                   }
                 >
                   {({ isActive }) => (
                     <>
                       <Icon
-                        className={`size-5 shrink-0 ${isActive ? "fill-blue-500/10" : ""
-                          }`}
+                        className={`size-5 shrink-0 ${
+                          isActive ? "fill-blue-500/10" : ""
+                        }`}
                       />
                       {!isCollapsed && (
                         <span className="text-sm font-medium whitespace-nowrap opacity-100 transition-opacity duration-300">
@@ -174,7 +196,7 @@ const Sidebar: React.FC = () => {
               <div className="flex items-center gap-2">
                 <ChevronLeft className="size-5 group-hover:-translate-x-1 transition-transform" />
                 <span className="text-xs font-bold uppercase tracking-widest">
-                  Collapse
+                  {t("nav.collapse")}
                 </span>
               </div>
             )}
@@ -183,9 +205,11 @@ const Sidebar: React.FC = () => {
           {/* User Profile Footer */}
           <div className="relative">
             <div
-              className={`flex items-center ${isCollapsed ? "justify-center" : "gap-3"
-                } rounded-xl border border-white/5 bg-[#161e2d] ${isCollapsed ? "p-2" : "p-3"
-                } shadow-lg transition-all`}
+              className={`flex items-center ${
+                isCollapsed ? "justify-center" : "gap-3"
+              } rounded-xl border border-white/5 bg-[#161e2d] ${
+                isCollapsed ? "p-2" : "p-3"
+              } shadow-lg transition-all`}
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-700">
                 <User className="size-5 text-slate-300" />
@@ -193,9 +217,9 @@ const Sidebar: React.FC = () => {
               {!isCollapsed && (
                 <div className="flex flex-col overflow-hidden opacity-100 transition-opacity duration-300 flex-1">
                   <p className="truncate text-sm font-medium text-white">
-                    Alex Designer
+                    {username}
                   </p>
-                  <p className="truncate text-xs text-slate-400">user_88219</p>
+                  <p className="truncate text-xs text-slate-400">{email}</p>
                 </div>
               )}
               {!isCollapsed && (
@@ -234,7 +258,9 @@ const Sidebar: React.FC = () => {
               className="glass-panel rounded-xl shadow-2xl border border-white/10 p-4 space-y-3"
             >
               <div className="space-y-1 pb-2 border-b border-white/10">
-                <h3 className="text-lg font-bold text-white">Quick Menu</h3>
+                <h3 className="text-lg font-bold text-white">
+                  {t("nav.quickMenu")}
+                </h3>
               </div>
 
               {/* Language Selector */}
@@ -249,7 +275,9 @@ const Sidebar: React.FC = () => {
                   </span>
                   <ChevronDown
                     size={16}
-                    className={`text-slate-400 transition-transform ${isLanguageOpen ? "rotate-180" : ""}`}
+                    className={`text-slate-400 transition-transform ${
+                      isLanguageOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
                 {isLanguageOpen && (
@@ -258,10 +286,11 @@ const Sidebar: React.FC = () => {
                       <button
                         key={lang.id}
                         onClick={() => handleLanguageChange(lang.id)}
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors ${language === lang.id
-                          ? "bg-blue-600/20 text-blue-400"
-                          : "text-slate-300 hover:text-white hover:bg-white/5"
-                          }`}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors ${
+                          language === lang.id
+                            ? "bg-blue-600/20 text-blue-400"
+                            : "text-slate-300 hover:text-white hover:bg-white/5"
+                        }`}
                       >
                         <span className="text-xl">{lang.flag}</span>
                         <span>{lang.fullLabel}</span>
@@ -280,7 +309,9 @@ const Sidebar: React.FC = () => {
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-purple-600/20 hover:bg-purple-600/30 transition-colors text-left"
               >
                 <Home className="size-5 text-purple-400" />
-                <span className="text-sm font-medium text-white">Home</span>
+                <span className="text-sm font-medium text-white">
+                  {t("nav.home")}
+                </span>
               </button>
               {/* Logout Button */}
               <button
@@ -288,7 +319,9 @@ const Sidebar: React.FC = () => {
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 transition-colors text-left"
               >
                 <LogOut className="size-5 text-red-400" />
-                <span className="text-sm font-medium text-white">Logout</span>
+                <span className="text-sm font-medium text-white">
+                  {t("nav.logout")}
+                </span>
               </button>
             </div>
           </div>

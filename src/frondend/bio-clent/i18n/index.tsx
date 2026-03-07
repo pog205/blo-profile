@@ -1,58 +1,32 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
-import { en, Translations } from "./en";
-import { vi } from "./vi";
+/**
+ * i18n entry point — backed by react-i18next
+ * Import this to get the configured i18next instance.
+ * Use `useTranslation()` from 'react-i18next' in components.
+ *
+ * For backward-compat the `useI18n` hook is kept so Sidebar / Navbar
+ * don't need to change: it exposes `{ language, setLanguage, toggleLanguage }`.
+ */
 
-type Language = "en" | "vi";
+import "./config";
+import i18n from "./config";
+import { useTranslation } from "react-i18next";
 
-interface I18nContextType {
-  language: Language;
-  t: Translations;
-  setLanguage: (lang: Language) => void;
-  toggleLanguage: () => void;
-}
+export type Language = "en" | "vi";
 
-const translations: Record<Language, Translations> = {
-  en,
-  vi,
-};
+// Backward-compat hook used in Sidebar / Navbar
+export function useI18n() {
+  const { i18n: instance } = useTranslation();
+  const language = (instance.language?.slice(0, 2) ?? "en") as Language;
 
-const I18nContext = createContext<I18nContextType | undefined>(undefined);
-
-export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    // Get from localStorage or default to 'en'
-    const saved = localStorage.getItem("language") as Language;
-    return saved && translations[saved] ? saved : "en";
-  });
-
-  const setLanguage = useCallback((lang: Language) => {
-    setLanguageState(lang);
-    localStorage.setItem("language", lang);
-  }, []);
-
-  const toggleLanguage = useCallback(() => {
-    setLanguage(language === "en" ? "vi" : "en");
-  }, [language, setLanguage]);
-
-  const value: I18nContextType = {
-    language,
-    t: translations[language],
-    setLanguage,
-    toggleLanguage,
+  const setLanguage = (lang: Language) => {
+    instance.changeLanguage(lang);
   };
 
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
-};
+  const toggleLanguage = () => {
+    setLanguage(language === "en" ? "vi" : "en");
+  };
 
-export const useI18n = (): I18nContextType => {
-  const context = useContext(I18nContext);
-  if (!context) {
-    throw new Error("useI18n must be used within an I18nProvider");
-  }
-  return context;
-};
+  return { language, setLanguage, toggleLanguage };
+}
 
-export { en, vi };
-export type { Translations, Language };
+export default i18n;

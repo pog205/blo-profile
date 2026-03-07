@@ -1,4 +1,6 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import {
   Settings,
   User,
@@ -9,38 +11,51 @@ import {
   CreditCard,
   LogOut,
 } from "lucide-react";
+import { authService } from "../services/auth.service";
+import { authToast } from "../utils/toast";
 
 const SettingsPage: React.FC = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await authService.logout();
+    } finally {
+      authToast.logoutSuccess();
+      navigate("/auth");
+    }
+  };
   const settingsSections = [
     {
       icon: User,
-      label: "Profile",
-      description: "Manage your account details",
+      label: t("settings.profile"),
+      description: t("settings.profileDesc"),
     },
     {
       icon: Bell,
-      label: "Notifications",
-      description: "Configure notification preferences",
+      label: t("settings.notifications"),
+      description: t("settings.notificationsDesc"),
     },
     {
       icon: Shield,
-      label: "Privacy & Security",
-      description: "Control your privacy settings",
+      label: t("settings.privacySecurity"),
+      description: t("settings.privacySecurityDesc"),
     },
     {
       icon: Palette,
-      label: "Appearance",
-      description: "Customize the look and feel",
+      label: t("settings.appearance"),
+      description: t("settings.appearanceDesc"),
     },
     {
       icon: Globe,
-      label: "Language & Region",
-      description: "Set your preferred language",
+      label: t("settings.languageRegion"),
+      description: t("settings.languageRegionDesc"),
     },
     {
       icon: CreditCard,
-      label: "Billing",
-      description: "Manage your subscription",
+      label: t("settings.billing"),
+      description: t("settings.billingDesc"),
     },
   ];
 
@@ -49,7 +64,7 @@ const SettingsPage: React.FC = () => {
       <div className="flex items-center gap-2 mb-6">
         <Settings className="size-5 text-blue-400" />
         <h3 className="text-sm font-bold text-white uppercase tracking-widest">
-          Settings
+          {t("settings.title")}
         </h3>
       </div>
 
@@ -79,9 +94,12 @@ const SettingsPage: React.FC = () => {
       </div>
 
       <div className="pt-4 border-t border-white/5">
-        <button className="flex items-center gap-3 text-red-400 hover:text-red-300 transition-colors">
+        <button
+          onClick={handleSignOut}
+          className="flex items-center gap-3 text-red-400 hover:text-red-300 transition-colors"
+        >
           <LogOut className="size-4" />
-          <span className="text-sm font-medium">Sign Out</span>
+          <span className="text-sm font-medium">{t("settings.signOut")}</span>
         </button>
       </div>
     </div>

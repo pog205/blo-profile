@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   BarChart3,
   TrendingUp,
@@ -10,30 +11,35 @@ import {
 } from "lucide-react";
 
 const AnalyticsPage: React.FC = () => {
+  const { t } = useTranslation();
   const stats = [
     {
-      label: "Total Views",
+      id: "views",
+      label: t("analytics.totalViews"),
       value: "12,543",
       change: "+12.5%",
       isUp: true,
       icon: Eye,
     },
     {
-      label: "Unique Visitors",
+      id: "visitors",
+      label: t("analytics.uniqueVisitors"),
       value: "8,234",
       change: "+8.2%",
       isUp: true,
       icon: Users,
     },
     {
-      label: "Avg. Time on Page",
+      id: "time",
+      label: t("analytics.avgTimeOnPage"),
       value: "2m 34s",
       change: "-3.1%",
       isUp: false,
       icon: Clock,
     },
     {
-      label: "Link Clicks",
+      id: "clicks",
+      label: t("analytics.linkClicks"),
       value: "3,421",
       change: "+15.7%",
       isUp: true,
@@ -46,7 +52,7 @@ const AnalyticsPage: React.FC = () => {
       <div className="flex items-center gap-2 mb-6">
         <BarChart3 className="size-5 text-purple-400" />
         <h3 className="text-sm font-bold text-white uppercase tracking-widest">
-          Analytics Overview
+          {t("analytics.title")}
         </h3>
       </div>
 
@@ -55,7 +61,7 @@ const AnalyticsPage: React.FC = () => {
           const Icon = stat.icon;
           return (
             <div
-              key={stat.label}
+              key={stat.id}
               className="bg-[#0d1117] border border-white/5 rounded-2xl p-6 space-y-4"
             >
               <div className="flex items-center justify-between">
@@ -86,10 +92,10 @@ const AnalyticsPage: React.FC = () => {
 
       <div className="bg-[#0d1117] border border-white/5 rounded-2xl p-8">
         <h4 className="text-sm font-semibold text-white mb-6">
-          Traffic Overview
+          {t("analytics.trafficOverview")}
         </h4>
         <div className="h-64 flex items-center justify-center text-slate-500">
-          <p>Chart visualization coming soon...</p>
+          <p>{t("analytics.chartComingSoon")}</p>
         </div>
       </div>
     </div>
