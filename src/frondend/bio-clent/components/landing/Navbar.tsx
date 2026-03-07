@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Fingerprint, ChevronDown, Globe } from "lucide-react";
+import { ChevronDown, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "../../i18n";
 
@@ -20,11 +20,15 @@ const Navbar: React.FC = () => {
     { id: "vi", flag: "🇻🇳", label: "VI" },
   ];
 
-  const currentLanguage = languages.find((lang) => lang.id === language) || languages[0];
+  const currentLanguage =
+    languages.find((lang) => lang.id === language) || languages[0];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -46,12 +50,11 @@ const Navbar: React.FC = () => {
           className="flex items-center gap-3 group cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-background transform group-hover:rotate-12 transition-transform">
-            <Fingerprint size={20} strokeWidth={2.5} />
-          </div>
-          <span className="text-xl font-bold tracking-tight hidden sm:block">
-            BioProfile
-          </span>
+          <img
+            src="/assets/pog-logo.png"
+            alt="POG Logo"
+            className="h-10 w-auto transform group-hover:scale-110 transition-transform"
+          />
         </div>
 
         {/* Links */}
@@ -76,7 +79,10 @@ const Navbar: React.FC = () => {
             >
               <Globe size={14} />
               <span>{currentLanguage.label}</span>
-              <ChevronDown size={12} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+              <ChevronDown
+                size={12}
+                className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+              />
             </button>
             {isOpen && (
               <div className="absolute top-full left-0 mt-2 glass-panel rounded-lg shadow-xl shadow-black/40 border border-white/10 min-w-[120px] overflow-hidden">
@@ -84,10 +90,11 @@ const Navbar: React.FC = () => {
                   <button
                     key={lang.id}
                     onClick={() => handleLanguageChange(lang.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold transition-colors ${language === lang.id
-                      ? "bg-primary/20 text-primary"
-                      : "text-muted hover:text-white hover:bg-white/5"
-                      }`}
+                    className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold transition-colors ${
+                      language === lang.id
+                        ? "bg-primary/20 text-primary"
+                        : "text-muted hover:text-white hover:bg-white/5"
+                    }`}
                   >
                     <span className="text-base">{lang.flag}</span>
                     <span>{lang.label}</span>
@@ -104,7 +111,7 @@ const Navbar: React.FC = () => {
             Dashboard
           </button>
           <button
-            onClick={() => navigate("/custom")}
+            onClick={() => navigate("/auth")}
             className="bg-primary text-background text-sm font-bold px-4 sm:px-6 py-2 sm:py-2.5 rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(0,212,255,0.3)]"
           >
             Get Started

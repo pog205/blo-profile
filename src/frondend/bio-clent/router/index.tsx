@@ -8,12 +8,18 @@ import {
   ShopPage,
   AnalyticsPage,
   SettingsPage,
+  AuthPage,
 } from "../pages";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "/auth",
+    element: <AuthPage />,
     errorElement: <ErrorBoundary />,
   },
   {
