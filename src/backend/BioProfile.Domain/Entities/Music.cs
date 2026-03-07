@@ -12,7 +12,7 @@ public class Music : BaseEntity
     /// <summary>
     /// Display order of the music track.
     /// </summary>
-    public int Order { get; set; }
+    public int DisplayOrder { get; set; }
 
     // Foreign key
     public Guid BioProfileId { get; set; }

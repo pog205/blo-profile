@@ -35,13 +35,13 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
         return Result<BioProfileResponse>.Success(MapToResponse(bioProfile));
     }
 
-    public async Task<Result<IReadOnlyList<BioProfileResponse>>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
-    {
-        var bioProfiles = await bioProfileRepository.GetByUserIdAsync(userId, cancellationToken);
-        var response = bioProfiles.Select(MapToResponse).ToList();
-
-        return Result<IReadOnlyList<BioProfileResponse>>.Success(response);
-    }
+    // TODO: Implement after adding UserAccountId FK to BioProfileEntity
+    // public async Task<Result<IReadOnlyList<BioProfileResponse>>> GetByUserAccountIdAsync(Guid userAccountId, CancellationToken cancellationToken = default)
+    // {
+    //     var bioProfiles = await bioProfileRepository.GetByUserAccountIdAsync(userAccountId, cancellationToken);
+    //     var response = bioProfiles.Select(MapToResponse).ToList();
+    //     return Result<IReadOnlyList<BioProfileResponse>>.Success(response);
+    // }
 
     public async Task<Result<BioProfileResponse>> CreateAsync(CreateBioProfileRequest request, string userId, CancellationToken cancellationToken = default)
     {
@@ -54,7 +54,6 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
         var bioProfileEntity = new BioProfileEntity
         {
             Id = Guid.NewGuid(),
-            UserId = userId,
             Slug = request.Profile.Slug,
             Name = request.Profile.Name,
             EnglishName = request.Profile.EnglishName,
@@ -69,8 +68,8 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
             IconsColor = request.Theme.Colors.Icons,
             ProfileOpacity = request.Theme.ProfileOpacity,
             ProfileBlur = request.Theme.ProfileBlur,
-            MouseEffect = (int)request.Effects.MouseEffect,
-            BackgroundEffect = (int)request.Effects.BackgroundEffect,
+            MouseEffectUrl = request.Effects.MouseEffectUrl,
+            BackgroundEffectId = request.Effects.BackgroundEffectId,
             Views = 0
         };
 
@@ -82,7 +81,7 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
                 Id = Guid.NewGuid(),
                 Title = music.Title,
                 MusicUrl = music.MusicUrl,
-                Order = music.Order,
+                DisplayOrder = music.Order,
                 BioProfileId = bioProfileEntity.Id
             });
         }
@@ -90,13 +89,13 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
         // Add social links
         foreach (var socialLink in request.SocialLinks)
         {
-            bioProfileEntity.SocialLinks.Add(new SocialLink
+            bioProfileEntity.UserSocialLinks.Add(new UserSocialLink
             {
                 Id = Guid.NewGuid(),
-                Platform = socialLink.Platform,
+                BioProfileId = bioProfileEntity.Id,
+                SocialLinkId = socialLink.SocialLinkId,
                 Url = socialLink.Url,
-                Icon = socialLink.Icon,
-                BioProfileId = bioProfileEntity.Id
+                DisplayOrder = socialLink.DisplayOrder
             });
         }
 
@@ -140,8 +139,8 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
         // Update effects
         if (request.Effects is not null)
         {
-            bioProfile.MouseEffect = (int)request.Effects.MouseEffect;
-            bioProfile.BackgroundEffect = (int)request.Effects.BackgroundEffect;
+            bioProfile.MouseEffectUrl = request.Effects.MouseEffectUrl;
+            bioProfile.BackgroundEffectId = request.Effects.BackgroundEffectId;
         }
 
         await bioProfileRepository.UpdateAsync(bioProfile, cancellationToken);
@@ -173,7 +172,7 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
     {
         return new BioProfileResponse(
             entity.Id,
-            entity.UserId,
+            Guid.Empty, // UserId removed
             new ProfileSettings(
                 entity.Slug,
                 entity.Name,
@@ -195,13 +194,15 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
                     entity.ProfileOpacity,
                     entity.ProfileBlur
                 ),
-                entity.Musics.Select(m => new MusicData(m.Title, m.MusicUrl, m.Order)).ToList(),
-                entity.SocialLinks.Select(s => new SocialLinkData(s.Platform, s.Url, s.Icon)).ToList()
+                entity.Musics.Select(m => new MusicData(m.Title, m.MusicUrl, m.DisplayOrder)).ToList(),
+                entity.UserSocialLinks
+                    .Select(usl => new SocialLinkData(usl.SocialLinkId, usl.Url, usl.SocialLink.Icon, usl.SocialLink.Platform, usl.DisplayOrder))
+                    .ToList()
             ),
             new SimulationProps(
                 new EffectSettings(
-                    (MouseEffectType)entity.MouseEffect,
-                    (BackgroundEffectType)entity.BackgroundEffect
+                    entity.MouseEffectUrl,
+                    entity.BackgroundEffectId
                 )
             ),
             entity.Views,

@@ -24,14 +24,14 @@ public class BioProfileEntity : BaseEntity
     public double ProfileBlur { get; set; } = 10.5;
 
     // Effects
-    public int MouseEffect { get; set; } // Store as int for enum
-    public int BackgroundEffect { get; set; } // Store as int for enum
+    public string? MouseEffectUrl { get; set; } // URL for custom mouse effect
+    public Guid? BackgroundEffectId { get; set; } // Foreign key to BackgroundEffect
 
     // Metadata
-    public string UserId { get; set; } = null!;
     public int Views { get; set; }
 
     // Navigation properties
+    public BackgroundEffect? BackgroundEffect { get; set; }
     public ICollection<Music> Musics { get; set; } = [];
-    public ICollection<SocialLink> SocialLinks { get; set; } = [];
+    public ICollection<UserSocialLink> UserSocialLinks { get; set; } = [];
 }

@@ -23,7 +23,7 @@ public class MusicConfiguration : BaseEntityConfiguration<Music, Guid>
             .IsRequired()
             .HasMaxLength(500);
 
-        builder.Property(m => m.Order)
+        builder.Property(m => m.DisplayOrder)
             .IsRequired();
 
         builder.Property(m => m.BioProfileId)
@@ -31,6 +31,6 @@ public class MusicConfiguration : BaseEntityConfiguration<Music, Guid>
 
         // Indexes
         builder.HasIndex(m => m.BioProfileId);
-        builder.HasIndex(m => new { m.BioProfileId, m.Order });
+        builder.HasIndex(m => new { m.BioProfileId, m.DisplayOrder });
     }
 }

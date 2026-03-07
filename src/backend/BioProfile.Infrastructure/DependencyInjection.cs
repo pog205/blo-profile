@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using BioProfile.Application.Auth;
+using BioProfile.Domain.IRepositories;
 using BioProfile.Domain.Repositories;
+using BioProfile.Infrastructure.Auth;
 using BioProfile.Infrastructure.Data;
 using BioProfile.Infrastructure.Data.Interceptors;
 using BioProfile.Infrastructure.Repositories;
@@ -26,6 +29,9 @@ public static class DependencyInjection
                 configuration.GetConnectionString("DefaultConnection"),
                 sqlOptions =>
                 {
+                    // Specify migrations assembly
+                    sqlOptions.MigrationsAssembly("BioProfile.Infrastructure");
+
                     // Enable retry on failure for transient errors
                     sqlOptions.EnableRetryOnFailure(
                         maxRetryCount: 3,
@@ -42,6 +48,12 @@ public static class DependencyInjection
 
         // Register repositories
         services.AddScoped<IBioProfileRepository, BioProfileRepository>();
+        services.AddScoped<ISocialLinkRepository, SocialLinkRepository>();
+        services.AddScoped<IMusicRepository, MusicReponsitory>();
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        // Register services
+        services.AddScoped<IJwtService, JwtService>();
 
         return services;
     }

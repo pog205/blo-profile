@@ -5,26 +5,64 @@ namespace BioProfile.Domain.Enums;
 /// </summary>
 public enum SocialPlatform
 {
-    YouTube,
-    Discord,
-    Spotify,
+    // Social Networks
+    Snapchat,
     Instagram,
+    Facebook,
     X,
-    TikTok,
-    Telegram,
-    SoundCloud,
-    PayPal,
-    GitHub,
-    Twitch,
-    AppleMusic,
-    Strava,
-    Reddit,
+    Threads,
+    VK,
     LinkedIn,
-    Shopify,
-    Pinterest,
-    Patreon,
-    OnlyFans,
+
+    // Video Platforms
+    YouTube,
+    TikTok,
+    Twitch,
+    Kick,
+
+    // Chat/Community
+    Discord,
+    Telegram,
+    Signal,
+    Reddit,
+
+    // Music/Audio
+    Spotify,
+    AppleMusic,
+    SoundCloud,
+    LastFm,
+
+    // Payment/Donation
+    PayPal,
     CashApp,
+    BuyMeACoffee,
+    Kofi,
+    Patreon,
+
+    // Development
+    GitHub,
+    GitLab,
+
+    // Gaming
+    Roblox,
+    Steam,
+
+    // Content Platforms
+    OnlyFans,
+    Fansly,
+
+    // Other
+    Pinterest,
+
+    // Cryptocurrency
+    Bitcoin,
+    Ethereum,
+    Litecoin,
+    Solana,
+    XRP,
+    Monero,
+
+    // Contact
     Email,
     Website,
     Other

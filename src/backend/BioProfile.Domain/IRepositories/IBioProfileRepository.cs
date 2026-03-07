@@ -10,7 +10,7 @@ public interface IBioProfileRepository : IRepository<BioProfileEntity>
 {
     Task<BioProfileEntity?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<BioProfileEntity?> GetByIdWithDetailsAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<IReadOnlyList<BioProfileEntity>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<BioProfileEntity>> GetByUserAccountIdAsync(Guid userAccountId, CancellationToken cancellationToken = default);
     Task<bool> SlugExistsAsync(string slug, CancellationToken cancellationToken = default);
     Task IncrementViewsAsync(Guid id, CancellationToken cancellationToken = default);
 }

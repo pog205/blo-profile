@@ -75,17 +75,12 @@ public class BioProfileConfiguration : BaseEntityConfiguration<BioProfileEntity,
             .HasDefaultValue(10.5);
 
         // Effects
-        builder.Property(b => b.MouseEffect)
-            .HasDefaultValue(0); // None
+        builder.Property(b => b.MouseEffectUrl)
+            .HasMaxLength(500);
 
-        builder.Property(b => b.BackgroundEffect)
-            .HasDefaultValue(0); // None
+        builder.Property(b => b.BackgroundEffectId);
 
         // Metadata
-        builder.Property(b => b.UserId)
-            .IsRequired()
-            .HasMaxLength(256);
-
         builder.Property(b => b.Views)
             .HasDefaultValue(0);
 
@@ -95,16 +90,10 @@ public class BioProfileConfiguration : BaseEntityConfiguration<BioProfileEntity,
             .HasForeignKey(m => m.BioProfileId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(b => b.SocialLinks)
-            .WithOne(s => s.BioProfile)
-            .HasForeignKey(s => s.BioProfileId)
-            .OnDelete(DeleteBehavior.Cascade);
-
         // Indexes
         builder.HasIndex(b => b.Slug)
             .IsUnique();
 
-        builder.HasIndex(b => b.UserId);
         builder.HasIndex(b => b.CreatedAt);
     }
 }

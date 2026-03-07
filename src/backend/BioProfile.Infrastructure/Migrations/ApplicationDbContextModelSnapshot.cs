@@ -22,6 +22,165 @@ namespace SystemDesign.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BioProfile.Domain.Entities.BackgroundEffect", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ColorHex")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EnableHoverEffect")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EnableLinks")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("MoveSpeed")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("float(5)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<double>("Opacity")
+                        .HasPrecision(3, 2)
+                        .HasColumnType("float(3)");
+
+                    b.Property<int>("ParticleCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Preset")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Shape")
+                        .HasColumnType("int");
+
+                    b.Property<double>("SizeMax")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("float(5)");
+
+                    b.Property<double>("SizeMin")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("float(5)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BackgroundEffects", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            ColorHex = "#00ff00",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            EnableHoverEffect = true,
+                            EnableLinks = true,
+                            IsActive = true,
+                            MoveSpeed = 2.5,
+                            Name = "Gaming Network",
+                            Opacity = 0.59999999999999998,
+                            ParticleCount = 100,
+                            Preset = 1,
+                            Shape = 1,
+                            SizeMax = 4.0,
+                            SizeMin = 2.0
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            ColorHex = "#ffffff",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            EnableHoverEffect = false,
+                            EnableLinks = false,
+                            IsActive = true,
+                            MoveSpeed = 1.5,
+                            Name = "Snow Falling",
+                            Opacity = 0.80000000000000004,
+                            ParticleCount = 150,
+                            Preset = 2,
+                            Shape = 1,
+                            SizeMax = 3.0,
+                            SizeMin = 1.0
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            ColorHex = "#ffff00",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            EnableHoverEffect = true,
+                            EnableLinks = false,
+                            IsActive = true,
+                            MoveSpeed = 1.0,
+                            Name = "Fireflies",
+                            Opacity = 0.69999999999999996,
+                            ParticleCount = 80,
+                            Preset = 3,
+                            Shape = 3,
+                            SizeMax = 2.5,
+                            SizeMin = 1.5
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
+                            ColorHex = "#ff6600",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            EnableHoverEffect = false,
+                            EnableLinks = false,
+                            IsActive = true,
+                            MoveSpeed = 3.0,
+                            Name = "Fire & Smoke",
+                            Opacity = 0.5,
+                            ParticleCount = 120,
+                            Preset = 4,
+                            Shape = 1,
+                            SizeMax = 5.0,
+                            SizeMin = 2.0
+                        },
+                        new
+                        {
+                            Id = new Guid("55555555-5555-5555-5555-555555555555"),
+                            ColorHex = "#00ff00",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            EnableHoverEffect = false,
+                            EnableLinks = false,
+                            IsActive = true,
+                            MoveSpeed = 4.0,
+                            Name = "Matrix Code",
+                            Opacity = 0.90000000000000002,
+                            ParticleCount = 200,
+                            Preset = 2,
+                            Shape = 2,
+                            SizeMax = 2.0,
+                            SizeMin = 1.0
+                        });
+                });
+
             modelBuilder.Entity("BioProfile.Domain.Entities.BioProfileEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -46,10 +205,8 @@ namespace SystemDesign.Infrastructure.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasDefaultValue("#ffffff");
 
-                    b.Property<int>("BackgroundEffect")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                    b.Property<Guid?>("BackgroundEffectId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BackgroundUrl")
                         .IsRequired()
@@ -90,10 +247,9 @@ namespace SystemDesign.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("MouseEffect")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                    b.Property<string>("MouseEffectUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -129,10 +285,8 @@ namespace SystemDesign.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<Guid?>("UserAccountId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Views")
                         .ValueGeneratedOnAdd()
@@ -141,14 +295,64 @@ namespace SystemDesign.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BackgroundEffectId");
+
                     b.HasIndex("CreatedAt");
 
                     b.HasIndex("Slug")
                         .IsUnique();
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserAccountId")
+                        .IsUnique()
+                        .HasFilter("[UserAccountId] IS NOT NULL");
 
                     b.ToTable("BioProfiles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            AccentColor = "#6366f1",
+                            AvatarUrl = "https://i.pravatar.cc/300",
+                            BackgroundColor = "#ffffff",
+                            BackgroundEffectId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            BackgroundUrl = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "This is a demo bio profile with gaming theme",
+                            EnglishName = "Demo Profile",
+                            FontFamily = "Inter",
+                            IconsColor = "#4b5563",
+                            Location = "Vietnam",
+                            Name = "Demo User",
+                            ProfileBlur = 10.5,
+                            ProfileOpacity = 0.94999999999999996,
+                            Slug = "demo-profile",
+                            TextColor = "#1f2937",
+                            Views = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                            AccentColor = "#3b82f6",
+                            AvatarUrl = "https://i.pravatar.cc/300?img=1",
+                            BackgroundColor = "#f8fafc",
+                            BackgroundEffectId = new Guid("22222222-2222-2222-2222-222222222222"),
+                            BackgroundUrl = "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5",
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = "System",
+                            Description = "Chill winter aesthetic profile",
+                            EnglishName = "Winter Theme",
+                            FontFamily = "Inter",
+                            IconsColor = "#64748b",
+                            Location = "Iceland",
+                            Name = "Winter Vibe",
+                            ProfileBlur = 8.0,
+                            ProfileOpacity = 0.90000000000000002,
+                            Slug = "winter-theme",
+                            TextColor = "#1e293b",
+                            Views = 0
+                        });
                 });
 
             modelBuilder.Entity("BioProfile.Domain.Entities.Music", b =>
@@ -166,13 +370,13 @@ namespace SystemDesign.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
                     b.Property<string>("MusicUrl")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -190,7 +394,7 @@ namespace SystemDesign.Infrastructure.Migrations
 
                     b.HasIndex("BioProfileId");
 
-                    b.HasIndex("BioProfileId", "Order");
+                    b.HasIndex("BioProfileId", "DisplayOrder");
 
                     b.ToTable("Musics", (string)null);
                 });
@@ -198,9 +402,6 @@ namespace SystemDesign.Infrastructure.Migrations
             modelBuilder.Entity("BioProfile.Domain.Entities.SocialLink", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BioProfileId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -225,6 +426,121 @@ namespace SystemDesign.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("Platform")
+                        .IsUnique();
+
+                    b.ToTable("SocialLinks", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("77777777-7777-7777-7777-777777777777"),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Icon = "https://cdn.simpleicons.org/github",
+                            Platform = 24
+                        },
+                        new
+                        {
+                            Id = new Guid("88888888-8888-8888-8888-888888888888"),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Icon = "https://cdn.simpleicons.org/x",
+                            Platform = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("99999999-9999-9999-9999-999999999999"),
+                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Icon = "https://cdn.simpleicons.org/linkedin",
+                            Platform = 6
+                        });
+                });
+
+            modelBuilder.Entity("BioProfile.Domain.Entities.UserAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("UserAccounts", (string)null);
+                });
+
+            modelBuilder.Entity("BioProfile.Domain.Entities.UserSocialLink", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BioProfileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("DisplayOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<Guid>("SocialLinkId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -234,7 +550,26 @@ namespace SystemDesign.Infrastructure.Migrations
 
                     b.HasIndex("BioProfileId");
 
-                    b.ToTable("SocialLinks", (string)null);
+                    b.HasIndex("SocialLinkId");
+
+                    b.HasIndex("BioProfileId", "SocialLinkId")
+                        .IsUnique();
+
+                    b.ToTable("UserSocialLinks", (string)null);
+                });
+
+            modelBuilder.Entity("BioProfile.Domain.Entities.BioProfileEntity", b =>
+                {
+                    b.HasOne("BioProfile.Domain.Entities.BackgroundEffect", "BackgroundEffect")
+                        .WithMany()
+                        .HasForeignKey("BackgroundEffectId");
+
+                    b.HasOne("BioProfile.Domain.Entities.UserAccount", null)
+                        .WithOne("BioProfile")
+                        .HasForeignKey("BioProfile.Domain.Entities.BioProfileEntity", "UserAccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("BackgroundEffect");
                 });
 
             modelBuilder.Entity("BioProfile.Domain.Entities.Music", b =>
@@ -248,22 +583,40 @@ namespace SystemDesign.Infrastructure.Migrations
                     b.Navigation("BioProfile");
                 });
 
-            modelBuilder.Entity("BioProfile.Domain.Entities.SocialLink", b =>
+            modelBuilder.Entity("BioProfile.Domain.Entities.UserSocialLink", b =>
                 {
                     b.HasOne("BioProfile.Domain.Entities.BioProfileEntity", "BioProfile")
-                        .WithMany("SocialLinks")
+                        .WithMany("UserSocialLinks")
                         .HasForeignKey("BioProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BioProfile.Domain.Entities.SocialLink", "SocialLink")
+                        .WithMany("UserSocialLinks")
+                        .HasForeignKey("SocialLinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("BioProfile");
+
+                    b.Navigation("SocialLink");
                 });
 
             modelBuilder.Entity("BioProfile.Domain.Entities.BioProfileEntity", b =>
                 {
                     b.Navigation("Musics");
 
-                    b.Navigation("SocialLinks");
+                    b.Navigation("UserSocialLinks");
+                });
+
+            modelBuilder.Entity("BioProfile.Domain.Entities.SocialLink", b =>
+                {
+                    b.Navigation("UserSocialLinks");
+                });
+
+            modelBuilder.Entity("BioProfile.Domain.Entities.UserAccount", b =>
+                {
+                    b.Navigation("BioProfile");
                 });
 #pragma warning restore 612, 618
         }

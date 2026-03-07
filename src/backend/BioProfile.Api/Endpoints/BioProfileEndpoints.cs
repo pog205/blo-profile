@@ -19,9 +19,10 @@ public static class BioProfileEndpoints
             .WithName("GetBioProfileBySlug")
             .WithSummary("Get a BioProfile by slug");
 
-        group.MapGet("/user/{userId}", GetBioProfilesByUserId)
-            .WithName("GetBioProfilesByUserId")
-            .WithSummary("Get all BioProfiles for a user");
+        // TODO: Re-enable after adding UserAccountId FK
+        // group.MapGet("/user/{userId}", GetBioProfilesByUserId)
+        //     .WithName("GetBioProfilesByUserId")
+        //     .WithSummary("Get all BioProfiles for a user");
 
         group.MapPost("/", CreateBioProfile)
             .WithName("CreateBioProfile")
@@ -66,17 +67,17 @@ public static class BioProfileEndpoints
             error => Results.NotFound(new { error }));
     }
 
-    private static async Task<IResult> GetBioProfilesByUserId(
-        string userId,
-        IBioProfileService bioProfileService,
-        CancellationToken cancellationToken)
-    {
-        var result = await bioProfileService.GetByUserIdAsync(userId, cancellationToken);
-
-        return result.Match(
-            bioProfiles => Results.Ok(bioProfiles),
-            error => Results.Problem(error));
-    }
+    // TODO: Implement after adding UserAccountId FK to BioProfileEntity
+    // private static async Task<IResult> GetBioProfilesByUserId(
+    //     string userId,
+    //     IBioProfileService bioProfileService,
+    //     CancellationToken cancellationToken)
+    // {
+    //     var result = await bioProfileService.GetByUserAccountIdAsync(userId, cancellationToken);
+    //     return result.Match(
+    //         bioProfiles => Results.Ok(bioProfiles),
+    //         error => Results.Problem(error));
+    // }
 
     private static async Task<IResult> CreateBioProfile(
         [FromBody] CreateBioProfileRequest request,

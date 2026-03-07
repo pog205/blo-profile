@@ -15,8 +15,9 @@ public class BioProfileRepository(ApplicationDbContext context)
     {
         return await DbSet
             .AsNoTracking()
-            .Include(b => b.Musics.OrderBy(m => m.Order))
-            .Include(b => b.SocialLinks)
+            .Include(b => b.Musics.OrderBy(m => m.DisplayOrder))
+            .Include(b => b.UserSocialLinks)
+                .ThenInclude(usl => usl.SocialLink)
             .FirstOrDefaultAsync(b => b.Slug == slug, cancellationToken);
     }
 
@@ -24,18 +25,20 @@ public class BioProfileRepository(ApplicationDbContext context)
     {
         return await DbSet
             .AsNoTracking()
-            .Include(b => b.Musics.OrderBy(m => m.Order))
-            .Include(b => b.SocialLinks)
+            .Include(b => b.Musics.OrderBy(m => m.DisplayOrder))
+            .Include(b => b.UserSocialLinks)
+                .ThenInclude(usl => usl.SocialLink)
             .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
     }
 
-    public async Task<IReadOnlyList<BioProfileEntity>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<BioProfileEntity>> GetByUserAccountIdAsync(Guid userAccountId, CancellationToken cancellationToken = default)
     {
+        // TODO: Add UserAccountId FK to BioProfileEntity
         return await DbSet
             .AsNoTracking()
-            .Where(b => b.UserId == userId)
-            .Include(b => b.Musics.OrderBy(m => m.Order))
-            .Include(b => b.SocialLinks)
+            .Include(b => b.Musics.OrderBy(m => m.DisplayOrder))
+            .Include(b => b.UserSocialLinks)
+                .ThenInclude(usl => usl.SocialLink)
             .OrderByDescending(b => b.CreatedAt)
             .ToListAsync(cancellationToken);
     }

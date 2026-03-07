@@ -19,18 +19,18 @@ public class SocialLinkConfiguration : BaseEntityConfiguration<SocialLink, Guid>
             .IsRequired()
             .HasConversion<int>();
 
-        builder.Property(s => s.Url)
-            .IsRequired()
-            .HasMaxLength(500);
-
         builder.Property(s => s.Icon)
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(s => s.BioProfileId)
-            .IsRequired();
+        // Unique constraint - each platform only once
+        builder.HasIndex(s => s.Platform)
+            .IsUnique();
 
-        // Indexes
-        builder.HasIndex(s => s.BioProfileId);
+        // Navigation
+        builder.HasMany(s => s.UserSocialLinks)
+            .WithOne(u => u.SocialLink)
+            .HasForeignKey(u => u.SocialLinkId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

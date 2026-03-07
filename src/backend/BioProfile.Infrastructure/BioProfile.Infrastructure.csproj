@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BioProfile.Application\BioProfile.Application.csproj" />
     <ProjectReference Include="..\BioProfile.Domain\BioProfile.Domain.csproj" />
   </ItemGroup>
 

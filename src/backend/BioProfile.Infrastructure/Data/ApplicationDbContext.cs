@@ -13,6 +13,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<BioProfileEntity> BioProfiles => Set<BioProfileEntity>();
     public DbSet<Music> Musics => Set<Music>();
     public DbSet<SocialLink> SocialLinks => Set<SocialLink>();
+    public DbSet<UserSocialLink> UserSocialLinks => Set<UserSocialLink>();
+    public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
+    public DbSet<BackgroundEffect> BackgroundEffects => Set<BackgroundEffect>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -20,6 +23,9 @@ public class ApplicationDbContext : DbContext
 
         // Apply all configurations from the current assembly
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        // Seed initial data
+        modelBuilder.SeedData();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

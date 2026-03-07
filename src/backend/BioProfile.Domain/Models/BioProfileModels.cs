@@ -64,17 +64,19 @@ public record MusicData(
 /// Social link data.
 /// </summary>
 public record SocialLinkData(
-    SocialPlatform Platform,
+    Guid SocialLinkId,
     string Url,
-    string Icon
+    string Icon,
+    SocialPlatform Platform,
+    int DisplayOrder
 );
 
 /// <summary>
 /// Visual effects settings.
 /// </summary>
 public record EffectSettings(
-    MouseEffectType MouseEffect,
-    BackgroundEffectType BackgroundEffect
+    string? MouseEffectUrl,
+    Guid? BackgroundEffectId
 );
 
 // ============================================================================
@@ -115,7 +117,7 @@ public record BioProfile(
 /// </summary>
 public record BioProfileDataRecord(
     Guid Id,
-    string UserId,
+    Guid UserId,
     ProfileSettings Profile,
     TechnicalProps TechnicalProps,
     SimulationProps SimulationProps,
@@ -164,7 +166,7 @@ public static class BioProfileExtensions
     /// <summary>
     /// Creates BioProfileDataRecord from BioProfile with metadata.
     /// </summary>
-    public static BioProfileDataRecord ToDataRecord(this BioProfile bioProfile, Guid id, string userId, int views = 0)
+    public static BioProfileDataRecord ToDataRecord(this BioProfile bioProfile, Guid id, Guid userId, int views = 0)
     {
         return new BioProfileDataRecord(
             id,
@@ -210,7 +212,7 @@ public record UpdateBioProfileRequest(
 /// </summary>
 public record BioProfileResponse(
     Guid Id,
-    string UserId,
+    Guid UserId,
     ProfileSettings Profile,
     TechnicalProps TechnicalProps,
     SimulationProps SimulationProps,
