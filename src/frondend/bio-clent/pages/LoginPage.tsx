@@ -64,7 +64,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigateSignup }) => {
         </div>
 
         <div className="relative z-10 flex flex-col h-full justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
             <img
               src="/assets/pog-logo.png"
               alt="POG Logo"

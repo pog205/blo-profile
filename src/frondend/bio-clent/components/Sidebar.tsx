@@ -121,6 +121,8 @@ const Sidebar: React.FC = () => {
   return (
     <>
       <div
+        onMouseEnter={(e) => e.currentTarget.querySelector<HTMLElement>('.sidebar-edge-btn')?.style.setProperty('opacity', '1')}
+        onMouseLeave={(e) => e.currentTarget.querySelector<HTMLElement>('.sidebar-edge-btn')?.style.setProperty('opacity', '0')}
         className={`${
           isCollapsed ? "w-20" : "w-64"
         } transition-all duration-300 ease-in-out flex flex-col justify-between border-r border-white/5 bg-[#101622] p-4 shrink-0 relative`}
@@ -145,7 +147,20 @@ const Sidebar: React.FC = () => {
           </div>
 
           {/* Navigation */}
-          <nav className="flex flex-col gap-2">
+          <div className="relative">
+            {/* Edge Toggle Button */}
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="absolute -right-7 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-5 h-10 rounded-r-lg bg-[#161e2d] border border-l-0 border-white/10 text-slate-500 hover:text-white hover:border-blue-500/40 hover:bg-blue-600/20 transition-all shadow-lg group opacity-0 hover:opacity-100 focus:opacity-100 sidebar-edge-btn"
+              style={{ outline: "none" }}
+            >
+              {isCollapsed ? (
+                <ChevronRight className="size-3.5 group-hover:scale-110 transition-transform" />
+              ) : (
+                <ChevronLeft className="size-3.5 group-hover:-translate-x-0.5 transition-transform" />
+              )}
+            </button>
+            <nav className="flex flex-col gap-2">
             {items.map((item) => {
               const Icon = item.icon;
               return (
@@ -180,28 +195,12 @@ const Sidebar: React.FC = () => {
                 </NavLink>
               );
             })}
-          </nav>
+            </nav>
+          </div>
         </div>
 
-        {/* Footer & Collapse Toggle */}
+        {/* Footer */}
         <div className="flex flex-col gap-4">
-          {/* Collapse Button */}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="flex items-center justify-center w-full h-10 rounded-lg bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-all border border-white/5 group"
-          >
-            {isCollapsed ? (
-              <ChevronRight className="size-5 group-hover:scale-110 transition-transform" />
-            ) : (
-              <div className="flex items-center gap-2">
-                <ChevronLeft className="size-5 group-hover:-translate-x-1 transition-transform" />
-                <span className="text-xs font-bold uppercase tracking-widest">
-                  {t("nav.collapse")}
-                </span>
-              </div>
-            )}
-          </button>
-
           {/* User Profile Footer */}
           <div className="relative">
             <div
