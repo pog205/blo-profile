@@ -1,0 +1,7 @@
+namespace BioProfile.ViewModels;
+public class UpdateBioProfileRequest
+{
+    public Guid Id { get; set; }
+    public string FieldName  { get; set; }
+    public string FieldValue { get; set; }
+}

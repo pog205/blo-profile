@@ -13,4 +13,5 @@ public interface IBioProfileRepository : IRepository<BioProfileEntity>
     Task<IReadOnlyList<BioProfileEntity>> GetByUserAccountIdAsync(Guid userAccountId, CancellationToken cancellationToken = default);
     Task<bool> SlugExistsAsync(string slug, CancellationToken cancellationToken = default);
     Task IncrementViewsAsync(Guid id, CancellationToken cancellationToken = default);
+    
 }

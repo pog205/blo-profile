@@ -191,8 +191,8 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
                         entity.BackgroundColor,
                         entity.IconsColor
                     ),
-                    entity.ProfileOpacity,
-                    entity.ProfileBlur
+                    entity.ProfileOpacity.Value,
+                    entity.ProfileBlur.Value
                 ),
                 entity.Musics.Select(m => new MusicData(m.Title, m.MusicUrl, m.DisplayOrder)).ToList(),
                 entity.UserSocialLinks
@@ -205,7 +205,7 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
                     entity.BackgroundEffectId
                 )
             ),
-            entity.Views,
+            entity.Views.Value,
             entity.CreatedAt,
             entity.UpdatedAt ?? entity.CreatedAt
         );

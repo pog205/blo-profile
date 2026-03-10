@@ -4,12 +4,14 @@ using BioProfile.Application.Common;
 using BioProfile.Application.Dtos.AuthDtos;
 using BioProfile.Domain.Entities;
 using BioProfile.Domain.IRepositories;
+using BioProfile.Domain.Repositories;
 
 namespace BioProfile.Application.Commands.Auth;
 
 public class RegisterCommandHandler(
     IUserRepository userRepository,
-    IJwtService jwtService) : ICommandHandler<RegisterCommand, Result<AuthResponse>>
+    IJwtService jwtService,
+    IBioProfileRepository bioProfileRepository) : ICommandHandler<RegisterCommand, Result<AuthResponse>>
 {
     public async Task<Result<AuthResponse>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
@@ -47,7 +49,7 @@ public class RegisterCommandHandler(
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
 
         await userRepository.AddAsync(user);
-
+        await AddBioProfileForUserAsync(user);
         return Result<AuthResponse>.Success(new AuthResponse(
             accessToken,
             refreshToken,
@@ -56,8 +58,19 @@ public class RegisterCommandHandler(
             user.Email
         ));
     }
+    private async Task AddBioProfileForUserAsync(UserAccount user)
+    {
+        var bioProfile = new BioProfile.Domain.Entities.BioProfileEntity
+        {
+            Id = Guid.NewGuid(),
+            Slug = user.Username,
+            Name = user.Username,
+            CreatedAt = DateTime.UtcNow
+        };
+        await bioProfileRepository.AddAsync(bioProfile);
+        
+    }
 }
-
 public class LoginCommandHandler(
     IUserRepository userRepository,
     IJwtService jwtService) : ICommandHandler<LoginCommand, Result<AuthResponse>>
