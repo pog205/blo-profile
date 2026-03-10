@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect,useCallback } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Bolt,
@@ -35,8 +35,9 @@ interface LanguageOption {
 }
 
 const Sidebar: React.FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isSidebarHovered, setIsSidebarHovered] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isPinned, setIsPinned] = useState(false);
+  const [isNavHovered, setIsNavHovered] = useState(false);
   const [isQuickMenuOpen, setIsQuickMenuOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ bottom: 80, left: 16 });
@@ -46,7 +47,9 @@ const Sidebar: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { language, setLanguage } = useI18n();
-
+  const hasLeftMenu = useRef<boolean>(true) // Track nếu đã rời menu ít nhất 1 lần
+  const isMouseInside = useRef<boolean>(false) // Track nếu chuột đang ở trong menu hay không
+  const hoverTimer = useRef<NodeJS.Timeout | null>(null) // Timer để delay expand menu khi hover
   const user = JSON.parse(localStorage.getItem("user") ?? "{}");
   const username: string = user.username ?? "User";
   const email: string = user.email ?? "";
@@ -118,15 +121,36 @@ const Sidebar: React.FC = () => {
       navigate("/auth");
     }
   };
+const onMouseEnter = useCallback(() => {
+    if (!isPinned && isCollapsed && hasLeftMenu.current) {
+      isMouseInside.current = true
+      hoverTimer.current = setTimeout(() => {
+        if (isMouseInside.current && !isPinned && hasLeftMenu.current) {
+          setIsCollapsed(false)
+        }
+      }, 200)
+    }
+  }, [isCollapsed, isPinned])
 
+  const onMouseLeave = useCallback(() => {
+    isMouseInside.current = false
+    hasLeftMenu.current = true
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current)
+      hoverTimer.current = null
+    }
+    if (!isPinned) {
+      setIsCollapsed(true)
+    }
+  }, [isPinned])
   return (
     <>
       <div
-        onMouseEnter={() => setIsSidebarHovered(true)}
-        onMouseLeave={() => setIsSidebarHovered(false)}
         className={`${
           isCollapsed ? "w-20" : "w-64"
         } transition-all duration-300 ease-in-out flex flex-col justify-between border-r border-white/5 bg-[#101622] p-4 shrink-0 relative`}
+       onMouseEnter={onMouseEnter}
+              onMouseLeave={onMouseLeave}
       >
         <div className="flex flex-col gap-8">
           {/* Brand & Toggle */}
@@ -149,51 +173,75 @@ const Sidebar: React.FC = () => {
 
           {/* Navigation */}
           <div className="relative">
-            {/* Edge Toggle Button */}
-            <button
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className={`absolute -right-7 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-5 h-10 rounded-r-lg bg-[#161e2d] border border-l-0 border-white/10 text-slate-500 hover:text-white hover:border-blue-500/40 hover:bg-blue-600/20 transition-all shadow-lg group ${isSidebarHovered ? 'opacity-100' : 'opacity-0'}`}
-              style={{ outline: "none" }}
+            <nav
+              className="flex flex-col gap-2"
+             
             >
-              {isCollapsed ? (
-                <ChevronRight className="size-3.5 group-hover:scale-110 transition-transform" />
-              ) : (
-                <ChevronLeft className="size-3.5 group-hover:-translate-x-0.5 transition-transform" />
-              )}
-            </button>
-            <nav className="flex flex-col gap-2">
             {items.map((item) => {
               const Icon = item.icon;
+              const isDashboardItem = item.to === "/dashboard";
               return (
-                <NavLink
+                <div
                   key={item.to}
-                  to={item.to}
-                  title={isCollapsed ? item.label : ""}
-                  className={({ isActive }) =>
-                    `flex items-center ${
-                      isCollapsed ? "justify-center" : "gap-3"
-                    } rounded-lg h-12 transition-all duration-200 ${
-                      isActive
-                        ? "bg-blue-600/10 text-blue-500 ring-1 ring-blue-500/20 shadow-sm"
-                        : "text-slate-400 hover:bg-white/5 hover:text-white"
-                    } ${isCollapsed ? "px-0" : "px-3"}`
-                  }
+                  className="relative"
+                  onMouseEnter={() => isDashboardItem && setIsNavHovered(true)}
+                  onMouseLeave={() => isDashboardItem && setIsNavHovered(false)}
                 >
-                  {({ isActive }) => (
-                    <>
-                      <Icon
-                        className={`size-5 shrink-0 ${
-                          isActive ? "fill-blue-500/10" : ""
-                        }`}
-                      />
-                      {!isCollapsed && (
-                        <span className="text-sm font-medium whitespace-nowrap opacity-100 transition-opacity duration-300">
-                          {item.label}
-                        </span>
+                  <NavLink
+                    to={item.to}
+                    title={isCollapsed ? item.label : ""}
+                    className={({ isActive }) =>
+                      `flex items-center ${
+                        isCollapsed ? "justify-center" : "gap-3"
+                      } rounded-lg h-12 transition-all duration-200 ${
+                        isActive
+                          ? "bg-blue-600/10 text-blue-500 ring-1 ring-blue-500/20 shadow-sm"
+                          : "text-slate-400 hover:bg-white/5 hover:text-white"
+                      } ${isCollapsed ? "px-0" : "px-3"} ${
+                        isDashboardItem && !isCollapsed ? "pr-12" : ""
+                      }`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <Icon
+                          className={`size-5 shrink-0 ${
+                            isActive ? "fill-blue-500/10" : ""
+                          }`}
+                        />
+                        {!isCollapsed && (
+                          <span className="text-sm font-medium whitespace-nowrap opacity-100 transition-opacity duration-300">
+                            {item.label}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </NavLink>
+
+                  {isDashboardItem && !isCollapsed && (
+                    <button
+                      type="button"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        if (isPinned) {
+                          setIsPinned(false);
+                          setIsCollapsed(true);
+                        } else {
+                          setIsPinned(true);
+                        }
+                      }}
+                      className="absolute right-2 top-1/2 z-10 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md border border-white/10 bg-[#161e2d] text-slate-500 shadow-lg transition-all hover:border-blue-500/40 hover:bg-blue-600/20 hover:text-white"
+                      aria-label={isPinned ? "Unpin and collapse sidebar" : "Pin sidebar open"}
+                    >
+                      {isPinned ? (
+                        <ChevronLeft className="size-3.5 transition-transform hover:-translate-x-0.5" />
+                      ) : (
+                        <ChevronRight className="size-3.5 transition-transform hover:scale-110" />
                       )}
-                    </>
+                    </button>
                   )}
-                </NavLink>
+                </div>
               );
             })}
             </nav>
