@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
     create: `${API_BASE_URL}/api/bio-profiles`,
     update: (id: string) => `${API_BASE_URL}/api/bio-profiles/${id}`,
     delete: (id: string) => `${API_BASE_URL}/api/bio-profiles/${id}`,
+    uploadFile: `${API_BASE_URL}/api/bio-profiles/upload/image`,
   },
 
   // Social Link endpoints

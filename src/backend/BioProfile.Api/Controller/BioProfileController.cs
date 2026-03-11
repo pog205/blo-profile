@@ -30,4 +30,14 @@ public class BioProfileController(
         }
         return NoContent();
     }
+
+    [HttpPost("upload/image")]
+    public async Task<IActionResult> UploadFile(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded.");
+
+        // TODO: Upload logic
+        return Ok(new { message = "File uploaded successfully" });
+    }
 }

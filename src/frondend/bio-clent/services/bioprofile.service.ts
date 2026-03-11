@@ -26,7 +26,7 @@ interface CreateBioProfileRequest {
   isPublic?: boolean;
 }
 
-interface UpdateBioProfileRequest extends Partial<CreateBioProfileRequest> {}
+interface UpdateBioProfileRequest extends Partial<CreateBioProfileRequest> { }
 
 export const bioProfileService = {
   /**
@@ -77,6 +77,13 @@ export const bioProfileService = {
   async delete(id: string): Promise<void> {
     return apiService.delete<void>(
       API_ENDPOINTS.bioProfile.delete(id),
+      true
+    );
+  },
+  async uploadFile(file: File): Promise<string> {
+    return apiService.post<string>(
+      API_ENDPOINTS.bioProfile.uploadFile,
+      file,
       true
     );
   },
