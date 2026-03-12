@@ -36,8 +36,7 @@ public class BioProfileController(
     {
         if (file == null || file.Length == 0)
             return BadRequest("No file uploaded.");
-
-        // TODO: Upload logic
-        return Ok(new { message = "File uploaded successfully" });
+        var result = await mediator.Send(new UploadImageBioProfileCommad(file));
+        return Ok(result);
     }
 }

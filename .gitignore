@@ -429,3 +429,5 @@ FodyWeavers.xsd
 
 # Windows reserved device name - cannot be indexed by Git on Windows
 /nul
+
+tokyo-country-473706-i9-90dc4701e97c.json
