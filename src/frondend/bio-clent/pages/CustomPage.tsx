@@ -1,45 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Palette,
-  Image as ImageIcon,
-  MapPin,
-  Lock,
-  Sparkles,
-  Droplets,
-  Pipette,
-} from "lucide-react";
+import { GripVertical } from "lucide-react";
 import { ProfileState } from "../types";
-import AssetUploader from "../components/AssetUploader";
 import Canvas from "../components/Canvas";
+import AssetsSection from "../components/custom/AssetsSection";
+import GeneralSettingsSection from "../components/custom/GeneralSettingsSection";
+import ColorThemeSection from "../components/custom/ColorThemeSection";
 
-const ColorInput: React.FC<{
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-}> = ({ label, value, onChange }) => (
-  <div className="space-y-2">
-    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">
-      {label}
-    </label>
-    <div className="relative flex items-center group">
-      <div
-        className="absolute left-3 w-5 h-5 rounded-full border border-white/20 shadow-inner cursor-pointer"
-        style={{ backgroundColor: value }}
-      />
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-11 pr-10 text-[11px] font-mono text-white focus:outline-none focus:border-blue-500/50 transition-all"
-      />
-      <Pipette className="absolute right-3 size-4 text-slate-500 group-hover:text-white transition-colors cursor-pointer" />
-    </div>
-  </div>
-);
-
+// --- Main Component: CustomPage ---
 const CustomPage: React.FC = () => {
   const { t } = useTranslation();
+
+  // 1. State cho Profile
   const [profile, setProfile] = useState<ProfileState>({
     description: t("custom.defaultDescription"),
     backgroundEffect: "None",
@@ -53,182 +25,87 @@ const CustomPage: React.FC = () => {
     location: "Ho Chi Minh City",
   });
 
+  // 2. State cho Resizing
+  const [leftWidth, setLeftWidth] = useState(500); // Độ rộng mặc định 500px
+  const [isResizing, setIsResizing] = useState(false);
+
+  // Logic xử lý kéo thả: dùng mousedown để gắn listener trực tiếp
+  const startResizing = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const startX = e.clientX;
+      const startWidth = leftWidth;
+
+      setIsResizing(true);
+      document.body.style.cursor = "col-resize";
+
+      const handleMouseMove = (event: MouseEvent) => {
+        const delta = event.clientX - startX;
+        // Giới hạn: tối thiểu 350px, tối đa 800px
+        const newWidth = Math.min(Math.max(350, startWidth + delta), 800);
+        setLeftWidth(newWidth);
+      };
+
+      const handleMouseUp = () => {
+        setIsResizing(false);
+        document.body.style.cursor = "default";
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
+      };
+
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    },
+    [leftWidth]
+  );
+
   const updateProfile = (key: keyof ProfileState, value: string | number) => {
     setProfile({ ...profile, [key]: value });
   };
 
   return (
-    <div className="flex h-full">
+    <div
+      className={`flex h-full bg-[#050505] ${isResizing ? "select-none" : ""}`}
+    >
       {/* ── Left: Canvas Preview ── */}
-      <div className="w-[500px] shrink-0 border-r border-white/5 bg-[#050505] sticky top-0 h-[calc(100vh-64px)]">
+      <div
+        style={{ width: `${leftWidth}px` }}
+        className="shrink-0 border-r border-white/5 bg-black sticky top-0 h-[calc(100vh-64px)] overflow-hidden"
+      >
         <Canvas profile={profile} />
       </div>
 
+      {/* ── Resizer Bar: Thanh kéo giữa ── */}
+      <div
+        onMouseDown={startResizing}
+        className={`group relative w-1 hover:w-1.5 transition-all cursor-col-resize flex items-center justify-center
+          ${
+            isResizing ? "bg-blue-600 w-1.5" : "bg-white/5 hover:bg-blue-500/40"
+          }`}
+      >
+        {/* Icon chỉ dẫn nhỏ xuất hiện khi hover */}
+        <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-blue-500 p-1 rounded-full shadow-lg">
+          <GripVertical className="size-3 text-white" />
+        </div>
+      </div>
+
       {/* ── Right: Customization Controls ── */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-12">
+      <div className="flex-1 overflow-y-auto p-8 space-y-12 bg-[#050505]">
         {/* Assets Section */}
-        <section>
-          <div className="flex items-center gap-2 mb-6">
-            <ImageIcon className="size-5 text-blue-400" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-widest">
-              {t("custom.assetsUploader")}
-            </h3>
-          </div>
-          <AssetUploader />
-        </section>
+        <AssetsSection />
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
           {/* General Customization */}
-          <section className="space-y-8 bg-[#0d1117] border border-white/5 p-8 rounded-2xl">
-            <div className="flex items-center gap-2 mb-2">
-              <Palette className="size-5 text-purple-400" />
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest">
-                {t("custom.generalSettings")}
-              </h3>
-            </div>
-
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-400 uppercase">
-                  {t("custom.description")}
-                </label>
-                <div className="relative">
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 italic font-serif text-lg leading-none">
-                    A
-                  </div>
-                  <input
-                    type="text"
-                    value={profile.description}
-                    onChange={(e) => updateProfile("description", e.target.value)}
-                    className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 transition-all text-white"
-                    placeholder={t("custom.descriptionPlaceholder")}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-400 uppercase">
-                  {t("custom.backgroundEffects")}
-                </label>
-                <div className="relative">
-                  <Sparkles className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
-                  <select
-                    value={profile.backgroundEffect}
-                    onChange={(e) =>
-                      updateProfile("backgroundEffect", e.target.value)
-                    }
-                    className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm appearance-none focus:outline-none focus:border-blue-500/50 text-white"
-                  >
-                    <option value="None">{t("custom.effects.none")}</option>
-                    <option value="Rain Drops">
-                      {t("custom.effects.rainDrops")}
-                    </option>
-                    <option value="Starfield">
-                      {t("custom.effects.starfield")}
-                    </option>
-                    <option value="Matrix Code">
-                      {t("custom.effects.matrixCode")}
-                    </option>
-                    <option value="Floating Orbs">
-                      {t("custom.effects.floatingOrbs")}
-                    </option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-semibold text-slate-400 uppercase">
-                      {t("custom.profileOpacity")}
-                    </label>
-                    <span className="text-xs text-blue-400 font-mono">
-                      {profile.profileOpacity}%
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                    value={profile.profileOpacity}
-                    min="0"
-                    max="100"
-                    onChange={(e) =>
-                      updateProfile("profileOpacity", Number(e.target.value))
-                    }
-                  />
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-semibold text-slate-400 uppercase">
-                      {t("custom.profileBlur")}
-                    </label>
-                    <span className="text-xs text-blue-400 font-mono">
-                      {profile.profileBlur}px
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                    value={profile.profileBlur}
-                    min="0"
-                    max="100"
-                    onChange={(e) =>
-                      updateProfile("profileBlur", Number(e.target.value))
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-400 uppercase">
-                  {t("custom.location")}
-                </label>
-                <div className="relative">
-                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
-                  <input
-                    type="text"
-                    value={profile.location}
-                    onChange={(e) => updateProfile("location", e.target.value)}
-                    className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white"
-                    placeholder={t("custom.locationPlaceholder")}
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
+          <GeneralSettingsSection
+            profile={profile}
+            updateProfile={updateProfile}
+          />
 
           {/* Color Customization */}
-          <section className="space-y-8 bg-[#0d1117] border border-white/5 p-8 rounded-2xl">
-            <div className="flex items-center gap-2 mb-2">
-              <Droplets className="size-5 text-emerald-400" />
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest">
-                {t("custom.colorsTheme")}
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <ColorInput
-                label={t("custom.accent")}
-                value={profile.accentColor}
-                onChange={(v) => updateProfile("accentColor", v)}
-              />
-              <ColorInput
-                label={t("custom.text")}
-                value={profile.textColor}
-                onChange={(v) => updateProfile("textColor", v)}
-              />
-              <ColorInput
-                label={t("custom.background")}
-                value={profile.backgroundColor}
-                onChange={(v) => updateProfile("backgroundColor", v)}
-              />
-              <ColorInput
-                label={t("custom.icons")}
-                value={profile.iconColor}
-                onChange={(v) => updateProfile("iconColor", v)}
-              />
-            </div>
-          </section>
+          <ColorThemeSection
+            profile={profile}
+            updateProfile={updateProfile}
+          />
         </div>
       </div>
     </div>
