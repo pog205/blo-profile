@@ -11,14 +11,24 @@ public class BioProfileController(
     ILogger<BioProfileController> logger) : BaseController(mediator, logger)
 {
 
-    // GET: api/BioProfile
+    // GET: api/BioProfile?slug=...
     [HttpGet]
     public async Task<IActionResult> GetBySlug([FromQuery] string slug)
     {
-        // TODO: Implement GetBySlug logic
-        var bioProfile = await mediator.Send(new GetBioProfileBySlugQuery (slug));
+        var bioProfile = await mediator.Send(new GetBioProfileBySlugQuery(slug));
         return Ok(bioProfile);
     }
+
+    // GET: api/BioProfile/{id}
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var bioProfile = await mediator.Send(new GetBioProfileByIdQuery(id));
+        if (bioProfile is null)
+            return NotFound();
+        return Ok(bioProfile);
+    }
+
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateBioProfileRequest request)
     {
@@ -36,7 +46,7 @@ public class BioProfileController(
     {
         if (file == null || file.Length == 0)
             return BadRequest("No file uploaded.");
-        var result = await mediator.Send(new UploadImageBioProfileCommad(file));
+        var result = await mediator.Send(new UploadImageBioProfileCommad(file.OpenReadStream(), file.FileName));
         return Ok(result);
     }
 }
