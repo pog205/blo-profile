@@ -3,7 +3,11 @@ import { Image as ImageIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import AssetUploader from "../AssetUploader";
 
-const AssetsSection: React.FC = () => {
+interface AssetsSectionProps {
+  isNarrow?: boolean;
+}
+
+const AssetsSection: React.FC<AssetsSectionProps> = ({ isNarrow }) => {
   const { t } = useTranslation();
 
   return (
@@ -14,7 +18,7 @@ const AssetsSection: React.FC = () => {
           {t("custom.assetsUploader")}
         </h3>
       </div>
-      <AssetUploader />
+      <AssetUploader isNarrow={isNarrow} />
     </section>
   );
 };

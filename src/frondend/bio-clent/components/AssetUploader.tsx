@@ -8,9 +8,13 @@ import {
 import { useTranslation } from "react-i18next";
 import ImageUpload from "./image-upload";
 
-const AssetUploader: React.FC = () => {
-  const { t } = useTranslation();
+interface AssetUploaderProps {
+  isNarrow?: boolean;
+}
 
+const AssetUploader: React.FC<AssetUploaderProps> = ({ isNarrow }) => {
+  const { t } = useTranslation();
+  
   const assets = [
     {
       label: t("custom.assets.profileBackground"),
@@ -42,8 +46,12 @@ const AssetUploader: React.FC = () => {
     },
   ];
 
+  const gridClasses = isNarrow
+    ? "grid-cols-1 sm:grid-cols-2"
+    : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4";
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+    <div className={`grid ${gridClasses} gap-6`}>
       {assets.map((asset, i) => {
         return (
 
