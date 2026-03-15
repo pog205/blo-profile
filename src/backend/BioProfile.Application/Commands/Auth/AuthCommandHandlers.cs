@@ -55,7 +55,8 @@ public class RegisterCommandHandler(
             refreshToken,
             expiration,
             user.Username,
-            user.Email
+            user.Email,
+            user.Id
         ));
     }
     private async Task AddBioProfileForUserAsync(UserAccount user)
@@ -105,7 +106,8 @@ public class LoginCommandHandler(
             refreshToken,
             expiration,
             user.Username,
-            user.Email
+            user.Email,
+            user.Id
         ));
     }
 }

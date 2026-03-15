@@ -1,3 +1,9 @@
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Drive.v3;
+using Google.Apis.Services;
+using BioProfile.Application.BioProfiles;
+
+namespace BioProfile.Infrastructure.Service;
 
 public class FileStorageService : IFileStorageService
 {

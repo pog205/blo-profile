@@ -16,5 +16,6 @@ public record AuthResponse(
     string RefreshToken,
     DateTime Expiration,
     string Username,
-    string Email
+    string Email,
+    Guid IdUser
 );
