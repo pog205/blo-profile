@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Sidebar from "../components/Sidebar";
-import Tooltip from "../components/ui/Tooltip";
+import Tooltip from "antd/es/tooltip";
 
 const MainLayout: React.FC = () => {
   const location = useLocation();
