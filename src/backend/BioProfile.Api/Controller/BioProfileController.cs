@@ -11,24 +11,7 @@ public class BioProfileController(
     ILogger<BioProfileController> logger) : BaseController(mediator, logger)
 {
 
-    // GET: api/BioProfile?slug=...
-    [HttpGet]
-    public async Task<IActionResult> GetBySlug([FromQuery] string slug)
-    {
-        var bioProfile = await mediator.Send(new GetBioProfileBySlugQuery(slug));
-        return Ok(bioProfile);
-    }
-
-    // GET: api/BioProfile/{id}
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id)
-    {
-        var bioProfile = await mediator.Send(new GetBioProfileByIdQuery(id));
-        if (bioProfile is null)
-            return NotFound();
-        return Ok(bioProfile);
-    }
-
+    
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateBioProfileRequest request)
     {

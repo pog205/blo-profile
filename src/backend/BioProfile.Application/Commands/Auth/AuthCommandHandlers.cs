@@ -61,12 +61,14 @@ public class RegisterCommandHandler(
     }
     private async Task AddBioProfileForUserAsync(UserAccount user)
     {
-        var bioProfile = new BioProfile.Domain.Entities.BioProfileEntity
+        var bioProfile = new BioProfileEntity
         {
             Id = Guid.NewGuid(),
             Slug = user.Username,
             Name = user.Username,
-            CreatedAt = DateTime.UtcNow
+            UserAccountId = user.Id,
+            UserAccount = user,
+            CreatedAt = DateTime.UtcNow,
         };
         await bioProfileRepository.AddAsync(bioProfile);
         
