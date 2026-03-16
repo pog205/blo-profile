@@ -1,15 +1,27 @@
 
 export interface ProfileState {
+  // Profile Settings
+  name: string;
   description: string;
-  backgroundEffect: string;
-  profileOpacity: number;
-  profileBlur: number;
+  location: string;
+  avatarUrl: string;
+  backgroundUrl: string;
+
+  // Theme Settings
+  fontFamily: string;
   accentColor: string;
   textColor: string;
   backgroundColor: string;
   iconColor: string;
+  profileOpacity: number;
+  profileBlur: number;
+
+  // Effects
+  backgroundEffect: string;
+  mouseEffectUrl: string;
+
+  // UI-only
   usernameEffects: string[];
-  location: string;
 }
 
 export enum NavItem {

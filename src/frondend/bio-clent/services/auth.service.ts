@@ -23,6 +23,7 @@ interface AuthResponse {
   expiration: string;
   username: string;
   email: string;
+  idUser: string;
 }
 
 export const authService = {
@@ -45,6 +46,7 @@ export const authService = {
       localStorage.setItem('user', JSON.stringify({
         username: response.username,
         email: response.email,
+        idUser: response.idUser,
       }));
     }
     
@@ -67,6 +69,7 @@ export const authService = {
       localStorage.setItem('user', JSON.stringify({
         username: response.username,
         email: response.email,
+        idUser: response.idUser,
       }));
     }
     

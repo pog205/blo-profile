@@ -30,8 +30,8 @@ public class GetBioProfileByIdQueryHandler(IBioProfileService bioProfileService)
             Id = result.Value.Id,
             Slug = result.Value.Profile.Slug,
             Name = result.Value.Profile.Name,
-            Bio = result.Value.Profile.Description,
-            ProfilePictureUrl = result.Value.Profile.AvatarUrl,
+            Description = result.Value.Profile.Description,
+            AvatarUrl = result.Value.Profile.AvatarUrl,
             CreatedAt = result.Value.CreatedAt
         };
     }

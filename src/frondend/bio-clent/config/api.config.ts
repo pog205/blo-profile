@@ -20,12 +20,12 @@ export const API_ENDPOINTS = {
 
   // Bio Profile endpoints
   bioProfile: {
-    getAll: `${API_BASE_URL}/api/bio-profiles`,
-    getById: (id: string) => `${API_BASE_URL}/api/bio-profiles/${id}`,
-    create: `${API_BASE_URL}/api/bio-profiles`,
-    update: (id: string) => `${API_BASE_URL}/api/bio-profiles/${id}`,
-    delete: (id: string) => `${API_BASE_URL}/api/bio-profiles/${id}`,
-    uploadFile: `${API_BASE_URL}/api/bio-profiles/upload/image`,
+    getAll: `${API_BASE_URL}/api/BioProfile`,
+getById: (id: string) => `${API_BASE_URL}/api/BioProfile/${id}`,
+create: `${API_BASE_URL}/api/BioProfile`,
+update: (id: string) => `${API_BASE_URL}/api/BioProfile/${id}`,
+delete: (id: string) => `${API_BASE_URL}/api/BioProfile/${id}`,
+uploadFile: `${API_BASE_URL}/api/BioProfile/upload/image`,
   },
 
   // Social Link endpoints

@@ -6,27 +6,54 @@
 import { API_ENDPOINTS } from '../config/api.config';
 import { apiService } from './api.service';
 
-interface BioProfile {
+export interface BioProfile {
+  // Identity
   id: string;
   slug: string;
-  displayName: string;
-  bio?: string;
+
+  // Profile Settings
+  name: string;
+  location?: string;
+  description?: string;
   avatarUrl?: string;
-  theme?: string;
-  isPublic: boolean;
-  viewCount: number;
+  backgroundUrl?: string;
+
+  // Theme Settings
+  fontFamily?: string;
+  accentColor?: string;
+  textColor?: string;
+  backgroundColor?: string;
+  iconsColor?: string;
+  profileOpacity?: number;
+  profileBlur?: number;
+
+  // Effects
+  mouseEffectUrl?: string;
+  backgroundEffectId?: string;
+
+  // Metadata
+  views?: number;
+  createdAt: string;
+  updatedAt?: string;
 }
 
-interface CreateBioProfileRequest {
-  slug: string;
-  displayName: string;
-  bio?: string;
+export interface UpdateBioProfileRequest {
+  slug?: string;
+  name?: string;
+  location?: string;
+  description?: string;
   avatarUrl?: string;
-  theme?: string;
-  isPublic?: boolean;
+  backgroundUrl?: string;
+  fontFamily?: string;
+  accentColor?: string;
+  textColor?: string;
+  backgroundColor?: string;
+  iconsColor?: string;
+  profileOpacity?: number;
+  profileBlur?: number;
+  mouseEffectUrl?: string;
+  backgroundEffectId?: string;
 }
-
-interface UpdateBioProfileRequest extends Partial<CreateBioProfileRequest> { }
 
 export const bioProfileService = {
   /**
@@ -52,7 +79,7 @@ export const bioProfileService = {
   /**
    * Create new bio profile
    */
-  async create(data: CreateBioProfileRequest): Promise<BioProfile> {
+  async create(data: UpdateBioProfileRequest): Promise<BioProfile> {
     return apiService.post<BioProfile>(
       API_ENDPOINTS.bioProfile.create,
       data,
@@ -87,4 +114,5 @@ export const bioProfileService = {
       true
     );
   },
+  
 };

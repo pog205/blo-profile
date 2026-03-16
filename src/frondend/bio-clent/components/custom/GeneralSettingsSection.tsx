@@ -1,5 +1,5 @@
 import React from "react";
-import { Palette, MapPin, Sparkles } from "lucide-react";
+import { Palette, MapPin, Sparkles, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ProfileState } from "../../types";
 
@@ -24,6 +24,24 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
       </div>
 
       <div className="space-y-6">
+        {/* Name */}
+        <div className="space-y-2">
+          <label className="text-xs font-semibold text-slate-400 uppercase">
+            {t("custom.name", "Name")}
+          </label>
+          <div className="relative">
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
+            <input
+              type="text"
+              value={profile.name}
+              onChange={(e) => updateProfile("name", e.target.value)}
+              className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 transition-all text-white"
+              placeholder={t("custom.namePlaceholder", "Your display name...")}
+            />
+          </div>
+        </div>
+
+        {/* Description */}
         <div className="space-y-2">
           <label className="text-xs font-semibold text-slate-400 uppercase">
             {t("custom.description")}
