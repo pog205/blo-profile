@@ -24,9 +24,6 @@ public class BioProfileConfiguration : BaseEntityConfiguration<BioProfileEntity,
             .IsRequired()
             .HasMaxLength(200);
 
-        builder.Property(b => b.EnglishName)
-            .IsRequired()
-            .HasMaxLength(200);
 
         builder.Property(b => b.Location)
             .HasMaxLength(200);

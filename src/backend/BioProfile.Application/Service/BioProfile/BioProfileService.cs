@@ -56,7 +56,6 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
             Id = Guid.NewGuid(),
             Slug = request.Profile.Slug,
             Name = request.Profile.Name,
-            EnglishName = request.Profile.EnglishName,
             Location = request.Profile.Location,
             Description = request.Profile.Description,
             AvatarUrl = request.Profile.AvatarUrl,
@@ -117,7 +116,6 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
         if (request.Profile is not null)
         {
             bioProfile.Name = request.Profile.Name;
-            bioProfile.EnglishName = request.Profile.EnglishName;
             bioProfile.Location = request.Profile.Location;
             bioProfile.Description = request.Profile.Description;
             bioProfile.AvatarUrl = request.Profile.AvatarUrl;
@@ -176,7 +174,6 @@ public class BioProfileService(IBioProfileRepository bioProfileRepository) : IBi
             new ProfileSettings(
                 entity.Slug,
                 entity.Name,
-                entity.EnglishName,
                 entity.Location,
                 entity.Description,
                 entity.AvatarUrl,

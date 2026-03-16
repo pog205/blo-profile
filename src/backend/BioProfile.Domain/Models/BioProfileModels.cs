@@ -24,7 +24,6 @@ public record BioProfileData(
 public record ProfileSettings(
     string Slug,
     string Name,
-    string EnglishName,
     string? Location,
     string? Description,
     string AvatarUrl,
