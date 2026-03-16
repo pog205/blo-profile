@@ -17,4 +17,5 @@ public class UserAccount : BaseEntity
 
     // Navigation property
     public BioProfileEntity? BioProfile { get; set; }
+
 }

@@ -8,7 +8,6 @@ public class BioProfileEntity : BaseEntity
     // Profile Settings
     public string? Slug { get; set; } = null!;
     public string? Name { get; set; } = null!;
-    public string? EnglishName { get; set; }
     public string? Location { get; set; }
     public string? Description { get; set; }
     public string? AvatarUrl { get; set; } = null!;
@@ -31,6 +30,8 @@ public class BioProfileEntity : BaseEntity
     public int? Views { get; set; }
 
     // Navigation properties
+    public Guid? UserAccountId { get; set; }
+    public virtual UserAccount? UserAccount { get; set; }
     public BackgroundEffect? BackgroundEffect { get; set; }
     public ICollection<Music>? Musics { get; set; } = [];
     public ICollection<UserSocialLink>? UserSocialLinks { get; set; } = [];

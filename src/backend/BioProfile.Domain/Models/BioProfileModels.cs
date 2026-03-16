@@ -209,16 +209,34 @@ public record UpdateBioProfileRequest(
 /// <summary>
 /// Response DTO for BioProfile with full metadata.
 /// </summary>
-public record BioProfileResponse(
-    Guid Id,
-    Guid UserId,
-    ProfileSettings Profile,
-    TechnicalProps TechnicalProps,
-    SimulationProps SimulationProps,
-    int Views,
-    DateTime CreatedAt,
-    DateTime UpdatedAt
-);
+public class BioProfileResponse
+{
+    public Guid Id { get; set; }
+    public string? Slug { get; set; }
+    public Guid UserId { get; set; }
+    public string? Name { get; set; }
+    public string? Location { get; set; }
+    public string? Description { get; set; }
+    public string? AvatarUrl { get; set; }
+    public string? BackgroundUrl { get; set; }
+    public string? FontFamily { get; set; }
+    public string? AccentColor { get; set; }
+    public string? TextColor { get; set; }
+    public string? BackgroundColor { get; set; }
+    public string? IconsColor { get; set; }
+    public double? ProfileOpacity { get; set; }
+    public double? ProfileBlur { get; set; }
+    public string? MouseEffectUrl { get; set; }
+    public Guid? BackgroundEffectId { get; set; }
+    public int? Views { get; set; }
+    public ThemeSettings Theme { get; set; }
+    public List<MusicData> Musics { get; set; }
+    public EffectSettings Effects { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+
+
+}
 
 /// <summary>
 /// Extension methods for DTOs.
@@ -240,17 +258,5 @@ public static class BioProfileDtoExtensions
     /// <summary>
     /// Converts BioProfileDataRecord to BioProfileResponse.
     /// </summary>
-    public static BioProfileResponse ToResponse(this BioProfileDataRecord entity)
-    {
-        return new BioProfileResponse(
-            entity.Id,
-            entity.UserId,
-            entity.Profile,
-            entity.TechnicalProps,
-            entity.SimulationProps,
-            entity.Views,
-            entity.CreatedAt,
-            entity.UpdatedAt
-        );
-    }
+    
 }

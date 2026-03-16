@@ -15,7 +15,6 @@ public static class DependencyInjection
             cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
         // Register application services
-        services.AddScoped<IBioProfileService, BioProfileService>();
 
         // Register command handlers
         services.AddScoped<ICommandHandler<RegisterCommand, Result<AuthResponse>>, RegisterCommandHandler>();
