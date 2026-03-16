@@ -61,7 +61,6 @@ app.UseAuthorization();
 
 // Map endpoints
 app.MapAuthEndpoints();
-app.MapBioProfileEndpoints();
-app.MapSocialLinkEndpoints();
+
 
 app.Run();
