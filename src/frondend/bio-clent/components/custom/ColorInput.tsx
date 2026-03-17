@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { Pipette } from "lucide-react";
-import { useState } from 'react';
+import ColorPickerModal from "../Module";
+
 interface ColorInputProps {
   label: string;
   value: string;
@@ -8,10 +9,22 @@ interface ColorInputProps {
 }
 
 const ColorInput: React.FC<ColorInputProps> = ({ label, value, onChange }) => {
-  // Dùng useRef để "giấu" cái thẻ input bảng màu mặc định
-  const colorPickerRef = useRef<HTMLInputElement>(null);
   const [isPickingColor, setIsPickingColor] = useState(false);
-  
+
+  // Sự kiện hút màu bằng Pipette
+  const handlePipetteClick = async () => {
+    if ('EyeDropper' in window) {
+      const eyeDropper = new (window as any).EyeDropper();
+      try {
+        const result = await eyeDropper.open();
+        onChange(result.sRGBHex);
+      } catch (e) {
+        console.log("Hủy hút màu");
+      }
+    } else {
+      alert("Trình duyệt không hỗ trợ hút màu ngoài màn hình!");
+    }
+  };
 
   return (
     <div className="space-y-2">
@@ -21,21 +34,12 @@ const ColorInput: React.FC<ColorInputProps> = ({ label, value, onChange }) => {
       
       <div className="relative flex items-center group">
         
-        {/* SỰ KIỆN 2: Bấm vào Vòng tròn màu để MỞ BẢNG CHỌN MÀU */}
+        {/* Bấm vào Vòng tròn màu để BẬT isPickingColor = true */}
         <div
-          onClick={() => colorPickerRef.current?.click()} // Kích hoạt input ẩn
+          onClick={() => setIsPickingColor(true)}
           className="absolute left-3 w-5 h-5 rounded-full border border-white/20 shadow-inner cursor-pointer z-10"
           style={{ backgroundColor: value }}
           title="Mở bảng chọn màu"
-        />
-
-        {/* Đây là input bảng màu của HTML, bị ẩn đi (hidden) */}
-        <input
-          type="color"
-          ref={colorPickerRef}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="hidden" 
         />
 
         {/* Ô nhập Text mã HEX */}
@@ -48,12 +52,21 @@ const ColorInput: React.FC<ColorInputProps> = ({ label, value, onChange }) => {
         
         {/* Icon Pipette hút màu */}
         <Pipette 
-          onClick={() => setIsPickingColor(true)} // Gắn sự kiện hút màu vào đây
+          onClick={handlePipetteClick}
           className="absolute right-3 size-4 text-slate-500 group-hover:text-white transition-colors cursor-pointer z-10" 
           title="Hút màu ngoài màn hình"
         />
-        
       </div>
+
+      {/* GỌI MODAL RA ĐÂY: Nếu isPickingColor là true thì mới hiển thị */}
+      {isPickingColor && (
+        <ColorPickerModal
+          initialColor={value}
+          onSave={(newColor) => onChange(newColor)} // Truyền màu mới ra ngoài form
+          onClosed={() => setIsPickingColor(false)} // Tắt modal
+        />
+      )}
+
     </div>
   );
 };
