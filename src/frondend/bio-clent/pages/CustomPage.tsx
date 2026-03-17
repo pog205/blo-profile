@@ -4,9 +4,11 @@ import { useOutletContext } from "react-router-dom";
 import { ProfileState } from "../types";
 import Canvas from "../components/Canvas";
 import CustomPanelView from "../components/custom/CustomPanelView";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { bioProfileService } from "@/services/bioprofile.service";
 import LoadingScreen from "../components/ui/LoadingScreen";
+import { IUpdateProfileRequest } from "@/interfaces/IBioProfile";
+import { toast } from "@/utils/toast";
 
 // --- Main Component: CustomPage ---
 const CustomPage: React.FC = () => {
@@ -103,8 +105,27 @@ const CustomPage: React.FC = () => {
     },
     [leftWidth]
   );
-
+  const updateProfileMutitation = useMutation({
+    mutationKey: ['UPDATE_TASK', profile.id],
+    mutationFn: async ({ fieldName, fieldValue }: { fieldName: string; fieldValue: string }) => {
+      const updatePayload: IUpdateProfileRequest = {
+        id: profile.id,
+        fieldName,
+        fieldValue,
+      };
+      const response = await bioProfileService.update( updatePayload);
+      return response;
+    },
+    onSuccess: () => {
+      toast.success('Cập nhật thành công!', 'Thông tin hồ sơ đã được lưu lại.');
+    },
+    onError: (error: any) => {
+      const message = error?.message || 'Có lỗi xảy ra khi cập nhật.';
+      toast.error('Cập nhật thất bại', message);
+    },
+  });
   const updateProfile = (key: keyof ProfileState, value: string | number) => {
+    updateProfileMutitation.mutate({ fieldName: key, fieldValue: value.toString() });
     setProfile({ ...profile, [key]: value });
   };
 

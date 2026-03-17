@@ -283,8 +283,6 @@ namespace SystemDesign.Infrastructure.Migrations
                     b.Property<Guid?>("UserAccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserAccountId1")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("Views")
                         .ValueGeneratedOnAdd()
@@ -304,7 +302,6 @@ namespace SystemDesign.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[UserAccountId] IS NOT NULL");
 
-                    b.HasIndex("UserAccountId1");
 
                     b.ToTable("BioProfiles", (string)null);
 
@@ -566,10 +563,6 @@ namespace SystemDesign.Infrastructure.Migrations
                         .WithOne("BioProfile")
                         .HasForeignKey("BioProfile.Domain.Entities.BioProfileEntity", "UserAccountId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BioProfile.Domain.Entities.UserAccount", "UserAccount")
-                        .WithMany()
-                        .HasForeignKey("UserAccountId1");
 
                     b.Navigation("BackgroundEffect");
 

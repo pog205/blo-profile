@@ -23,7 +23,7 @@ export const API_ENDPOINTS = {
     getAll: `${API_BASE_URL}/api/bioprofile`,
     getById: (id: string) => `${API_BASE_URL}/api/bioprofile/${id}`,
     create: `${API_BASE_URL}/api/bioprofile`,
-    update: (id: string) => `${API_BASE_URL}/api/bioprofile/${id}`,
+    update:  `${API_BASE_URL}/api/bioprofile`,
     delete: (id: string) => `${API_BASE_URL}/api/bioprofile/${id}`,
     uploadFile: `${API_BASE_URL}/api/bioprofile/upload-image`,
   },

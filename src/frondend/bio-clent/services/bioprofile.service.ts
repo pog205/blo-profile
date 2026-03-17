@@ -3,6 +3,7 @@
  * Handles all bio profile-related API calls
  */
 
+import { IUpdateProfileRequest } from '@/interfaces/IBioProfile';
 import { API_ENDPOINTS } from '../config/api.config';
 import { apiService } from './api.service';
 
@@ -37,23 +38,7 @@ export interface BioProfile {
   updatedAt?: string;
 }
 
-export interface UpdateBioProfileRequest {
-  slug?: string;
-  name?: string;
-  location?: string;
-  description?: string;
-  avatarUrl?: string;
-  backgroundUrl?: string;
-  fontFamily?: string;
-  accentColor?: string;
-  textColor?: string;
-  backgroundColor?: string;
-  iconsColor?: string;
-  profileOpacity?: number;
-  profileBlur?: number;
-  mouseEffectUrl?: string;
-  backgroundEffectId?: string;
-}
+
 
 export const bioProfileService = {
   /**
@@ -78,23 +63,15 @@ export const bioProfileService = {
 
   /**
    * Create new bio profile
-   */
-  async create(data: UpdateBioProfileRequest): Promise<BioProfile> {
-    return apiService.post<BioProfile>(
-      API_ENDPOINTS.bioProfile.create,
-      data,
-      true
-    );
-  },
+
 
   /**
    * Update bio profile
    */
-  async update(id: string, data: UpdateBioProfileRequest): Promise<BioProfile> {
+  async update( data: IUpdateProfileRequest): Promise<BioProfile> {
     return apiService.put<BioProfile>(
-      API_ENDPOINTS.bioProfile.update(id),
-      data,
-      true
+      API_ENDPOINTS.bioProfile.update,
+      data
     );
   },
 

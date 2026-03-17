@@ -286,9 +286,6 @@ namespace BioProfile.Infrastructure.Data.Migrations.Postgres
                     b.Property<Guid?>("UserAccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserAccountId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int?>("Views")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -307,7 +304,6 @@ namespace BioProfile.Infrastructure.Data.Migrations.Postgres
                         .IsUnique()
                         .HasFilter("[UserAccountId] IS NOT NULL");
 
-                    b.HasIndex("UserAccountId1");
 
                     b.ToTable("BioProfiles", (string)null);
 
@@ -570,9 +566,6 @@ namespace BioProfile.Infrastructure.Data.Migrations.Postgres
                         .HasForeignKey("BioProfile.Domain.Entities.BioProfileEntity", "UserAccountId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BioProfile.Domain.Entities.UserAccount", "UserAccount")
-                        .WithMany()
-                        .HasForeignKey("UserAccountId1");
 
                     b.Navigation("BackgroundEffect");
 
