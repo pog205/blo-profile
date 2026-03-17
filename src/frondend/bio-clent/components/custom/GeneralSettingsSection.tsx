@@ -138,13 +138,11 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
           <label className="text-xs font-semibold text-slate-400 uppercase">
             {t("custom.location")}
           </label>
-          <div className="relative">
-            {/* Thêm z-10 vào icon để chắc chắn nó không bị thư viện che mất */}
+          <div className="relative ">
               <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500 z-10" />
               
               <CountryDropdown 
-                // BÍ QUYẾT: Thêm dấu ! vào trước pl-10 và py-3
-                className="w-full bg-[#12161d] border border-white/10 rounded-lg !py-3 !pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white " 
+                className="w-full bg-[#12161d] border border-white/10 !h-12 !rounded-xl !py-3 !pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white " 
                 onChange={(countryName) => updateProfile("location", countryName)} 
               />
           </div>                
