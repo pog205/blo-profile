@@ -21,7 +21,7 @@ class ApiService {
       headers: {
         ...API_CONFIG.headers,
         ...(requiresAuth ? getAuthHeader() : {}),
-        ...headers,
+        ...headers, // Headers truyền từ ngoài vào sẽ đè lên (hoặc thêm mới) ở đây
       },
     };
 
@@ -42,41 +42,59 @@ class ApiService {
     }
   }
 
-  async get<T>(url: string, requiresAuth = false): Promise<T> {
+  // Bổ sung tham số headers
+  async get<T>(
+    url: string, 
+    requiresAuth = false, 
+    headers?: Record<string, string>
+  ): Promise<T> {
     return this.request<T>(url, {
       method: 'GET',
       requiresAuth,
+      headers,
     });
   }
 
+  // Bổ sung tham số headers
   async post<T>(
     url: string,
     data: unknown,
-    requiresAuth = false
+    requiresAuth = false,
+    headers?: Record<string, string>
   ): Promise<T> {
     return this.request<T>(url, {
       method: 'POST',
       body: JSON.stringify(data),
       requiresAuth,
+      headers,
     });
   }
 
+  // Bổ sung tham số headers
   async put<T>(
     url: string,
     data: unknown,
-    requiresAuth = false
+    requiresAuth = false,
+    headers?: Record<string, string>
   ): Promise<T> {
     return this.request<T>(url, {
       method: 'PUT',
       body: JSON.stringify(data),
       requiresAuth,
+      headers,
     });
   }
 
-  async delete<T>(url: string, requiresAuth = false): Promise<T> {
+  // Bổ sung tham số headers
+  async delete<T>(
+    url: string, 
+    requiresAuth = false, 
+    headers?: Record<string, string>
+  ): Promise<T> {
     return this.request<T>(url, {
       method: 'DELETE',
       requiresAuth,
+      headers,
     });
   }
 }

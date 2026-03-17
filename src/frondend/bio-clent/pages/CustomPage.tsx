@@ -42,7 +42,7 @@ const CustomPage: React.FC = () => {
   // 2. Fetch profile theo userId
   const { data: bioProfile, isLoading } = useQuery({
     queryKey: ["bioProfile", userId],
-    queryFn: async () => await bioProfileService.getById(userId!),
+    queryFn: async () => await bioProfileService.getById(userId),
     enabled: !!userId,
   });
   useEffect(() => {

@@ -13,7 +13,6 @@ public interface IBioProfileService
     // TODO: Implement after adding UserAccountId FK
     // Task<Result<IReadOnlyList<BioProfileResponse>>> GetByUserAccountIdAsync(Guid userAccountId, CancellationToken cancellationToken = default);
     Task<Result<BioProfileResponse>> CreateAsync(CreateBioProfileRequest request, string userId, CancellationToken cancellationToken = default);
-    Task<Result<BioProfileResponse>> UpdateAsync(Guid id, UpdateBioProfileRequest request, CancellationToken cancellationToken = default);
     Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Result> IncrementViewsAsync(Guid id, CancellationToken cancellationToken = default);
 }

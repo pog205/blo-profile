@@ -12,7 +12,7 @@ public class SociaLinkController(
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var result = await Mediator.Send(new GetSocialLinksQuery());
+        var result = await mediator.Send(new GetSocialLinksQuery());
         return Ok(result);
     }
 }

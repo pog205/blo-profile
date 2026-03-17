@@ -4,7 +4,7 @@ using BioProfile.Domain.Models;
 
 namespace BioProfile.Application.Queries.BioProfileQueries;
 
-public class GetBioProfileUserQuery : IQuery<BioProfileResponse?>
+public class GetBioProfileUserQuery : IQuery<BioProfileResponse>
 {
     public Guid UserAccountId { get; set; }
 
@@ -14,7 +14,7 @@ public class GetBioProfileUserQuery : IQuery<BioProfileResponse?>
     }
 }
 public class GetBioProfileUserQueryHandler
-    : IQueryHandler<GetBioProfileUserQuery, BioProfileResponse?>
+    : IQueryHandler<GetBioProfileUserQuery, BioProfileResponse>
 {
     private readonly IUserRepository userRepository;
 

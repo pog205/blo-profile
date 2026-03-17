@@ -24,12 +24,19 @@ public class BioProfileController(
         return NoContent();
     }
 
-    [HttpPost("upload/image")]
+    [HttpPost("upload-image")]
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
         if (file == null || file.Length == 0)
             return BadRequest("No file uploaded.");
         var result = await mediator.Send(new UploadImageBioProfileCommad(file.OpenReadStream(), file.FileName));
+        return Ok(result);
+    }
+
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> GetBioProfileUser([FromRoute] Guid userId)
+    {
+        var result = await mediator.Send(new GetBioProfileUserQuery(userId));
         return Ok(result);
     }
 }

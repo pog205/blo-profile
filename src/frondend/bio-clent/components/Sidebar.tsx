@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { useI18n } from "../i18n";
 import { authService } from "../services/auth.service";
 import { authToast } from "../utils/toast";
+import { use } from "i18next";
 
 interface NavItemConfig {
   to: string;
@@ -35,8 +36,8 @@ interface LanguageOption {
 }
 
 const Sidebar: React.FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [isPinned, setIsPinned] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isPinned, setIsPinned] = useState(true);
   const [isNavHovered, setIsNavHovered] = useState(false);
   const [isQuickMenuOpen, setIsQuickMenuOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
@@ -51,6 +52,11 @@ const Sidebar: React.FC = () => {
   const isMouseInside = useRef<boolean>(false) // Track nếu chuột đang ở trong menu hay không
   const hoverTimer = useRef<NodeJS.Timeout | null>(null) // Timer để delay expand menu khi hover
   const user = JSON.parse(localStorage.getItem("user") ?? "{}");
+  useEffect(() => {
+  console.log("🚀 ~ Sidebar ~ user:", user)
+
+  }, [user])
+  
   const username: string = user.username ?? "User";
   const email: string = user.email ?? "";
 

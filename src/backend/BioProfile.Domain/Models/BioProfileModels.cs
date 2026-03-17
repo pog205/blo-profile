@@ -198,13 +198,7 @@ public record CreateBioProfileRequest(
 /// <summary>
 /// Request DTO for updating an existing BioProfile.
 /// </summary>
-public record UpdateBioProfileRequest(
-    ProfileSettings? Profile,
-    ThemeSettings? Theme,
-    List<MusicData>? Musics,
-    List<SocialLinkData>? SocialLinks,
-    EffectSettings? Effects
-);
+
 
 /// <summary>
 /// Response DTO for BioProfile with full metadata.

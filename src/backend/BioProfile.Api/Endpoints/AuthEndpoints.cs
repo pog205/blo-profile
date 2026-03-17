@@ -52,8 +52,6 @@ public static class AuthEndpoints
 
     private static IResult LogoutAsync(HttpContext context)
     {
-        // For JWT, logout is handled client-side by removing the token
-        // Optionally, you can implement token blacklisting here
         return Results.Ok(new { message = "Logged out successfully" });
     }
 }

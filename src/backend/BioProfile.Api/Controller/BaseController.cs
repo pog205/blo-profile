@@ -6,11 +6,10 @@ namespace BioProfile.Api.Controller;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public abstract class BaseController(
     IMediator mediator,
     ILogger logger) : ControllerBase
 {
-    protected readonly IMediator Mediator = mediator;
-    protected readonly ILogger Logger = logger;
+    protected readonly IMediator mediator = mediator;
+    protected readonly ILogger logger = logger;
 }

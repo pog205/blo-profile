@@ -29,7 +29,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => {
         // ... (giữ nguyên code JWT của bạn)
     });
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
+builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
@@ -61,6 +63,6 @@ app.UseAuthorization();
 
 // Map endpoints
 app.MapAuthEndpoints();
-
+app.MapControllers();
 
 app.Run();
