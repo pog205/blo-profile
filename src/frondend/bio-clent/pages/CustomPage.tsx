@@ -45,9 +45,6 @@ const CustomPage: React.FC = () => {
     queryFn: async () => await bioProfileService.getById(userId),
     enabled: !!userId,
   });
-  useEffect(() => {
-    console.log("Fetched bioProfile:", bioProfile);
-  }, [bioProfile]);
   // 3. Populate form state từ API data
   useEffect(() => {
     if (!bioProfile) return;
@@ -138,6 +135,7 @@ const CustomPage: React.FC = () => {
         profile={profile}
         updateProfile={updateProfile}
         startResizing={startResizing}
+        
       />
     </div>
   );

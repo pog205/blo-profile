@@ -2,6 +2,7 @@ import React from "react";
 import { Palette, MapPin, Sparkles, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { ProfileState } from "../../types";
+import CountryDropdown from "../react-flags-select";
 
 interface GeneralSettingsSectionProps {
   profile: ProfileState;
@@ -138,15 +139,15 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
             {t("custom.location")}
           </label>
           <div className="relative">
-            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
-            <input
-              type="text"
-              value={profile.location}
-              onChange={(e) => updateProfile("location", e.target.value)}
-              className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white"
-              placeholder={t("custom.locationPlaceholder")}
-            />
-          </div>
+            {/* Thêm z-10 vào icon để chắc chắn nó không bị thư viện che mất */}
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500 z-10" />
+              
+              <CountryDropdown 
+                // BÍ QUYẾT: Thêm dấu ! vào trước pl-10 và py-3
+                className="w-full bg-[#12161d] border border-white/10 rounded-lg !py-3 !pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white " 
+                onChange={(countryName) => updateProfile("location", countryName)} 
+              />
+          </div>                
         </div>
       </div>
     </section>
