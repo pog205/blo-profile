@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BioProfile.Infrastructure.Data.Migrations.Postgres
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260316093721_update_db")]
-    partial class update_db
+    [Migration("20260319093444_InitialPostgres_Final")]
+    partial class InitialPostgres_Final
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -304,7 +304,6 @@ namespace BioProfile.Infrastructure.Data.Migrations.Postgres
                         .IsUnique()
                         .HasFilter("[UserAccountId] IS NOT NULL");
 
-
                     b.ToTable("BioProfiles", (string)null);
 
                     b.HasData(
@@ -561,11 +560,10 @@ namespace BioProfile.Infrastructure.Data.Migrations.Postgres
                         .WithMany()
                         .HasForeignKey("BackgroundEffectId");
 
-                    b.HasOne("BioProfile.Domain.Entities.UserAccount", null)
+                    b.HasOne("BioProfile.Domain.Entities.UserAccount", "UserAccount")
                         .WithOne("BioProfile")
                         .HasForeignKey("BioProfile.Domain.Entities.BioProfileEntity", "UserAccountId")
                         .OnDelete(DeleteBehavior.Cascade);
-
 
                     b.Navigation("BackgroundEffect");
 

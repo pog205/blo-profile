@@ -36,8 +36,8 @@ public class UserAccountConfiguration : BaseEntityConfiguration<UserAccount, Gui
 
         // Relationship with BioProfile
         builder.HasOne(u => u.BioProfile)
-            .WithOne()
-            .HasForeignKey<BioProfileEntity>("UserAccountId")
+            .WithOne(b => b.UserAccount)
+            .HasForeignKey<BioProfileEntity>(b => b.UserAccountId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
