@@ -106,10 +106,10 @@ const CustomPage: React.FC = () => {
     [leftWidth]
   );
   const updateProfileMutitation = useMutation({
-    mutationKey: ['UPDATE_TASK', profile.id],
+    mutationKey: ['UPDATE_TASK', bioProfile?.id],
     mutationFn: async ({ fieldName, fieldValue }: { fieldName: string; fieldValue: string }) => {
       const updatePayload: IUpdateProfileRequest = {
-        id: profile.id,
+        id: bioProfile?.id,
         fieldName,
         fieldValue,
       };
