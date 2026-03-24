@@ -1,19 +1,12 @@
 import React from "react";
 import { Droplets } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { ProfileState } from "../../types";
 import ColorInput from "./ColorInput";
+import { useProfile } from "../../contexts/ProfileContext";
 
-interface ColorThemeSectionProps {
-  profile: ProfileState;
-  updateProfile: (key: keyof ProfileState, value: string | number) => void;
-}
-
-const ColorThemeSection: React.FC<ColorThemeSectionProps> = ({
-  profile,
-  updateProfile,
-}) => {
+const ColorThemeSection: React.FC = () => {
   const { t } = useTranslation();
+  const { profile, handleProfileChange } = useProfile();
 
   return (
     <section className="space-y-8 bg-[#0d1117] border border-white/5 p-8 rounded-2xl">
@@ -28,22 +21,22 @@ const ColorThemeSection: React.FC<ColorThemeSectionProps> = ({
         <ColorInput
           label={t("custom.accent")}
           value={profile.accentColor}
-          onChange={(v) => updateProfile("accentColor", v)}
+          onChange={(v) => handleProfileChange("accentColor", v, true)}
         />
         <ColorInput
           label={t("custom.text")}
           value={profile.textColor}
-          onChange={(v) => updateProfile("textColor", v)}
+          onChange={(v) => handleProfileChange("textColor", v, true)}
         />
         <ColorInput
           label={t("custom.background")}
           value={profile.backgroundColor}
-          onChange={(v) => updateProfile("backgroundColor", v)}
+          onChange={(v) => handleProfileChange("backgroundColor", v, true)}
         />
         <ColorInput
           label={t("custom.icons")}
           value={profile.iconColor}
-          onChange={(v) => updateProfile("iconColor", v)}
+          onChange={(v) => handleProfileChange("iconColor", v, true)}
         />
       </div>
     </section>
@@ -51,4 +44,3 @@ const ColorThemeSection: React.FC<ColorThemeSectionProps> = ({
 };
 
 export default ColorThemeSection;
-

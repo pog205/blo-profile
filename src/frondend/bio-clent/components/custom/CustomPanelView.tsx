@@ -1,6 +1,5 @@
 import React from "react";
 import { GripVertical } from "lucide-react";
-import { ProfileState } from "../../types";
 import AssetsSection from "./AssetsSection";
 import GeneralSettingsSection from "./GeneralSettingsSection";
 import ColorThemeSection from "./ColorThemeSection";
@@ -10,8 +9,6 @@ interface CustomPanelViewProps {
   showCustom: boolean;
   isResizing: boolean;
   isCustomNarrow: boolean;
-  profile: ProfileState;
-  updateProfile: (key: keyof ProfileState, value: string | number) => void;
   startResizing: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -20,8 +17,6 @@ const CustomPanelView: React.FC<CustomPanelViewProps> = ({
   showCustom,
   isResizing,
   isCustomNarrow,
-  profile,
-  updateProfile,
   startResizing,
 }) => {
   return (
@@ -53,17 +48,11 @@ const CustomPanelView: React.FC<CustomPanelViewProps> = ({
               isCustomNarrow ? "grid-cols-1" : "grid-cols-1 xl:grid-cols-2"
             }`}
           >
-            {/* General Customization */}
-            <GeneralSettingsSection
-              profile={profile}
-              updateProfile={updateProfile}
-            />
+            {/* General Customization — tự lấy data từ useProfile() */}
+            <GeneralSettingsSection />
 
-            {/* Color Customization */}
-            <ColorThemeSection
-              profile={profile}
-              updateProfile={updateProfile}
-            />
+            {/* Color Customization — tự lấy data từ useProfile() */}
+            <ColorThemeSection />
           </div>
         </div>
       )}

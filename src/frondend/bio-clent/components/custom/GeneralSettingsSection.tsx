@@ -1,19 +1,12 @@
 import React from "react";
 import { Palette, MapPin, Sparkles, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { ProfileState } from "../../types";
 import CountryDropdown from "../react-flags-select";
+import { useProfile } from "../../contexts/ProfileContext";
 
-interface GeneralSettingsSectionProps {
-  profile: ProfileState;
-  updateProfile: (key: keyof ProfileState, value: string | number) => void;
-}
-
-const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
-  profile,
-  updateProfile,
-}) => {
+const GeneralSettingsSection: React.FC = () => {
   const { t } = useTranslation();
+  const { profile, handleProfileChange } = useProfile();
 
   return (
     <section className="space-y-8 bg-[#0d1117] border border-white/5 p-8 rounded-2xl">
@@ -25,7 +18,7 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
       </div>
 
       <div className="space-y-6">
-        {/* Name */}
+        {/* Name Input */}
         <div className="space-y-2">
           <label className="text-xs font-semibold text-slate-400 uppercase">
             {t("custom.name", "Name")}
@@ -35,14 +28,14 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
             <input
               type="text"
               value={profile.name}
-              onChange={(e) => updateProfile("name", e.target.value)}
+              onChange={(e) => handleProfileChange("name", e.target.value)}
               className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 transition-all text-white"
               placeholder={t("custom.namePlaceholder", "Your display name...")}
             />
           </div>
         </div>
 
-        {/* Description */}
+        {/* Description Input */}
         <div className="space-y-2">
           <label className="text-xs font-semibold text-slate-400 uppercase">
             {t("custom.description")}
@@ -54,13 +47,14 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
             <input
               type="text"
               value={profile.description}
-              onChange={(e) => updateProfile("description", e.target.value)}
+              onChange={(e) => handleProfileChange("description", e.target.value)}
               className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 transition-all text-white"
               placeholder={t("custom.descriptionPlaceholder")}
             />
           </div>
         </div>
 
+        {/* Background Effects */}
         <div className="space-y-2">
           <label className="text-xs font-semibold text-slate-400 uppercase">
             {t("custom.backgroundEffects")}
@@ -70,7 +64,7 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
             <select
               value={profile.backgroundEffect}
               onChange={(e) =>
-                updateProfile("backgroundEffect", e.target.value)
+                handleProfileChange("backgroundEffect", e.target.value, true)
               }
               className="w-full bg-[#12161d] border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm appearance-none focus:outline-none focus:border-blue-500/50 text-white"
             >
@@ -91,6 +85,7 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
           </div>
         </div>
 
+        {/* Profile Opacity & Blur Sliders */}
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -107,11 +102,10 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
               value={profile.profileOpacity}
               min="0"
               max="100"
-              onChange={(e) =>
-                updateProfile("profileOpacity", Number(e.target.value))
-              }
+              onChange={(e) => handleProfileChange("profileOpacity", Number(e.target.value))}
             />
           </div>
+          
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-xs font-semibold text-slate-400 uppercase">
@@ -127,25 +121,23 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
               value={profile.profileBlur}
               min="0"
               max="100"
-              onChange={(e) =>
-                updateProfile("profileBlur", Number(e.target.value))
-              }
+              onChange={(e) => handleProfileChange("profileBlur", Number(e.target.value))}
             />
           </div>
         </div>
 
+        {/* Country Select */}
         <div className="space-y-2">
           <label className="text-xs font-semibold text-slate-400 uppercase">
             {t("custom.location")}
           </label>
-          <div className="relative ">
-              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500 z-10" />
-              
-              <CountryDropdown 
-                className="w-full bg-[#12161d] border border-white/10 !h-12 !rounded-xl !py-3 !pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white " 
-                onChange={(countryName) => updateProfile("location", countryName)} 
-              />
-          </div>                
+          <div className="relative">
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500 z-10" />
+            <CountryDropdown 
+              className="w-full bg-[#12161d] border border-white/10 !h-12 !rounded-xl !py-3 !pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white" 
+              onChange={(countryName) => handleProfileChange("location", countryName)} 
+            />
+          </div>                 
         </div>
       </div>
     </section>
@@ -153,4 +145,3 @@ const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
 };
 
 export default GeneralSettingsSection;
-

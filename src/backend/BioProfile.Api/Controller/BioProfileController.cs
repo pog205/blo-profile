@@ -21,7 +21,7 @@ public class BioProfileController(
         {
             return BadRequest(result);
         }
-        return NoContent();
+        return Ok(result);
     }
 
     [HttpPost("upload-image")]

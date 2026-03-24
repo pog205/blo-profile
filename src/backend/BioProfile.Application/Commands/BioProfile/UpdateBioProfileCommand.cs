@@ -1,10 +1,11 @@
 using BioProfile.Application.Common;
+using BioProfile.Domain.Models;
 using BioProfile.Domain.Repositories;
 using FluentValidation;
 
 namespace BioProfile.Commands.BioProfile
 {
-    public class UpdateBioProfileCommand : ICommand<Result>
+    public class UpdateBioProfileCommand : ICommand<Result<BioProfileDto>>
     {
         public UpdateBioProfileCommand(Guid id, string fieldName, string fieldValue)
         {
@@ -26,7 +27,7 @@ namespace BioProfile.Commands.BioProfile
             RuleFor(x => x.FieldValue).NotEmpty().WithMessage("Field value is required.");
         }
     }
-    public class UpdateBioProfileCommandHandler : ICommandHandler<UpdateBioProfileCommand, Result>
+    public class UpdateBioProfileCommandHandler : ICommandHandler<UpdateBioProfileCommand, Result<BioProfileDto>>
     {
         private readonly IBioProfileRepository _bioProfileRepository ;
 
@@ -35,12 +36,12 @@ namespace BioProfile.Commands.BioProfile
             _bioProfileRepository = bioProfileRepository;
         }
 
-        public async Task<Result> Handle(UpdateBioProfileCommand request, CancellationToken cancellationToken)
+        public async Task<Result<BioProfileDto>> Handle(UpdateBioProfileCommand request, CancellationToken cancellationToken)
         {
               var existBioProfile = await _bioProfileRepository.GetByIdAsync(request.Id, cancellationToken);
             if (existBioProfile == null){
 
-                  return Result.Failure("BioProfile not found");
+                  return Result<BioProfileDto>.Failure("BioProfile not found");
             }
             switch (request.FieldName.ToLower())
             {
@@ -84,7 +85,7 @@ namespace BioProfile.Commands.BioProfile
                     }
                     else
                     {
-                        return Result.Failure("Invalid value for profile opacity");
+                        return Result<BioProfileDto>.Failure("Invalid value for profile opacity");
                     }
                     break;
                 case "profileblur":
@@ -94,7 +95,7 @@ namespace BioProfile.Commands.BioProfile
                     }
                     else
                     {
-                        return Result.Failure("Invalid value for profile blur");
+                        return Result<BioProfileDto>.Failure("Invalid value for profile blur");
                     }
                     break;
                 case "backgroundeffect":
@@ -104,14 +105,38 @@ namespace BioProfile.Commands.BioProfile
                     }
                     else
                     {
-                        return Result.Failure("Invalid value for background effect");
+                        return Result<BioProfileDto>.Failure("Invalid value for background effect");
                     }
                     break;
                 default:
-                    return Result.Failure("Invalid field name");
+                    return Result<BioProfileDto>.Failure("Invalid field name");
             }
-           await _bioProfileRepository.UpdateAsync(existBioProfile, cancellationToken);
-            return Result.Success();
+            await _bioProfileRepository.UpdateAsync(existBioProfile, cancellationToken);
+            var bioProfileDto = new BioProfileDto
+            {
+                Id = existBioProfile.Id,
+                Slug = existBioProfile.Slug,
+                Name = existBioProfile.Name,
+                Location = existBioProfile.Location,
+                Description = existBioProfile.Description,
+                AvatarUrl = existBioProfile.AvatarUrl,
+                BackgroundUrl = existBioProfile.BackgroundUrl,
+                FontFamily = existBioProfile.FontFamily,
+                AccentColor = existBioProfile.AccentColor,
+                TextColor = existBioProfile.TextColor,
+                BackgroundColor = existBioProfile.BackgroundColor,
+                IconsColor = existBioProfile.IconsColor,
+                ProfileOpacity = existBioProfile.ProfileOpacity,
+                ProfileBlur = existBioProfile.ProfileBlur,
+                MouseEffectUrl = existBioProfile.MouseEffectUrl,
+                BackgroundEffectId = existBioProfile.BackgroundEffectId,
+                Views = existBioProfile.Views,
+                CreatedAt = existBioProfile.CreatedAt,
+                UpdatedAt = existBioProfile.UpdatedAt
+
+            };
+            return Result<BioProfileDto>.Success(bioProfileDto);
         }
+        
     }
 }

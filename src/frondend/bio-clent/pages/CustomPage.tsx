@@ -4,11 +4,12 @@ import { useOutletContext } from "react-router-dom";
 import { ProfileState } from "../types";
 import Canvas from "../components/Canvas";
 import CustomPanelView from "../components/custom/CustomPanelView";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { bioProfileService } from "@/services/bioprofile.service";
 import LoadingScreen from "../components/ui/LoadingScreen";
 import { IUpdateProfileRequest } from "@/interfaces/IBioProfile";
 import { toast } from "@/utils/toast";
+import { ProfileProvider } from "../contexts/ProfileContext";
 
 // --- Main Component: CustomPage ---
 const CustomPage: React.FC = () => {
@@ -18,7 +19,7 @@ const CustomPage: React.FC = () => {
     showCanvas: boolean;
     showCustom: boolean;
   }>();
-
+  const queryClient = useQueryClient();
   // 1. State cho Profile (default values)
   const [profile, setProfile] = useState<ProfileState>({
     name: "",
@@ -37,13 +38,14 @@ const CustomPage: React.FC = () => {
     mouseEffectUrl: "",
     usernameEffects: [],
   });
+  
 
   // Lấy userId từ object 'user' trong localStorage (lưu sau khi login)
   const userId = JSON.parse(localStorage.getItem("user") || "{}").idUser as string | undefined;
-
+  
   // 2. Fetch profile theo userId
   const { data: bioProfile, isLoading } = useQuery({
-    queryKey: ["bioProfile", userId],
+    queryKey: ["BIO_PROFILE", userId],
     queryFn: async () => await bioProfileService.getById(userId),
     enabled: !!userId,
   });
@@ -105,7 +107,9 @@ const CustomPage: React.FC = () => {
     },
     [leftWidth]
   );
-  const updateProfileMutitation = useMutation({
+
+  // 5. Mutation gọi API update
+  const updateProfileMutation = useMutation({
     mutationKey: ['UPDATE_TASK', bioProfile?.id],
     mutationFn: async ({ fieldName, fieldValue }: { fieldName: string; fieldValue: string }) => {
       const updatePayload: IUpdateProfileRequest = {
@@ -113,21 +117,38 @@ const CustomPage: React.FC = () => {
         fieldName,
         fieldValue,
       };
-      const response = await bioProfileService.update( updatePayload);
+      const response = await bioProfileService.update(updatePayload);
       return response;
     },
-    onSuccess: () => {
-      toast.success('Cập nhật thành công!', 'Thông tin hồ sơ đã được lưu lại.');
+    onSuccess: (response, variables) => {
+      if (response) {
+        queryClient.setQueryData(['BIO_PROFILE', bioProfile?.id], (oldData: any) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            [variables.fieldName]: variables.fieldValue
+          };
+        });
+      }
+      toast.success('Cập nhật thành công!');
     },
     onError: (error: any) => {
       const message = error?.message || 'Có lỗi xảy ra khi cập nhật.';
       toast.error('Cập nhật thất bại', message);
     },
   });
-  const updateProfile = (key: keyof ProfileState, value: string | number) => {
-    updateProfileMutitation.mutate({ fieldName: key, fieldValue: value.toString() });
-    setProfile({ ...profile, [key]: value });
-  };
+
+  // 6. Hàm gọi API (truyền vào ProfileProvider)
+  const saveToApi = useCallback(
+    (key: keyof ProfileState, value: string | number) => {
+      if (value === undefined || value === null) {
+        toast.error('Giá trị không hợp lệ', 'Vui lòng nhập giá trị hợp lệ.');
+        return;
+      }
+      updateProfileMutation.mutate({ fieldName: key, fieldValue: value.toString() });
+    },
+    [updateProfileMutation]
+  );
 
   const isCustomNarrow = showCanvas && leftWidth > 500;
 
@@ -136,29 +157,28 @@ const CustomPage: React.FC = () => {
   }
 
   return (
-    <div
-      className={`flex h-full bg-[#050505] ${isResizing ? "select-none" : ""}`}
-    >
-      {showCanvas && (
-        <div
-          style={{ width: showCustom ? `${leftWidth}px` : "100%" }}
-          className="shrink-0 border-r border-white/5 bg-black sticky top-0 h-[calc(100vh-64px)] overflow-hidden"
-        >
-          <Canvas profile={profile} />
-        </div>
-      )}
+    <ProfileProvider profile={profile} setProfile={setProfile} saveToApi={saveToApi}>
+      <div
+        className={`flex h-full bg-[#050505] ${isResizing ? "select-none" : ""}`}
+      >
+        {showCanvas && (
+          <div
+            style={{ width: showCustom ? `${leftWidth}px` : "100%" }}
+            className="shrink-0 border-r border-white/5 bg-black sticky top-0 h-[calc(100vh-64px)] overflow-hidden"
+          >
+            <Canvas profile={profile} />
+          </div>
+        )}
 
-      <CustomPanelView
-        showCanvas={showCanvas}
-        showCustom={showCustom}
-        isResizing={isResizing}
-        isCustomNarrow={isCustomNarrow}
-        profile={profile}
-        updateProfile={updateProfile}
-        startResizing={startResizing}
-        
-      />
-    </div>
+        <CustomPanelView
+          showCanvas={showCanvas}
+          showCustom={showCustom}
+          isResizing={isResizing}
+          isCustomNarrow={isCustomNarrow}
+          startResizing={startResizing}
+        />
+      </div>
+    </ProfileProvider>
   );
 };
 
