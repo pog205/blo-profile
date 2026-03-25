@@ -65,7 +65,7 @@ const CustomPage: React.FC = () => {
       iconColor: bioProfile.iconsColor ?? "#9ca3af",
       // entity lưu 0.0–1.0 (opacity), UI dùng 0–100
       profileOpacity: bioProfile.profileOpacity != null
-        ? Math.round(bioProfile.profileOpacity * 100)
+        ? bioProfile.profileOpacity
         : 50,
       profileBlur: bioProfile.profileBlur ?? 20,
       backgroundEffect: "None",

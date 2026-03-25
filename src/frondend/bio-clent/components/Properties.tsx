@@ -84,6 +84,8 @@ const Properties: React.FC<PropertiesProps> = ({ profile, setProfile }) => {
             </div>
             <input 
               type="range" 
+              min="0"   
+              max="100"
               className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
               value={profile.profileOpacity}
               onChange={(e) => updateProfile('profileOpacity', Number(e.target.value))}
