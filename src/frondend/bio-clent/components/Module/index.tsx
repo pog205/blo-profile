@@ -44,7 +44,7 @@ const ColorPickerModal = ({
           <X className="size-5" />
         </button>
 
-        <div className="mb-6">
+        <div className="mb-6 pt-4">
           {/* DÙNG HEX COLOR PICKER */}
           <HexColorPicker 
             color={color} 

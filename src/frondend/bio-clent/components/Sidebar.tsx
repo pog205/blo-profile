@@ -12,6 +12,7 @@ import {
   MoreVertical,
   Home,
   MessageSquare,
+  LogIn,
   LogOut,
   ChevronDown,
   LucideIcon,
@@ -149,6 +150,13 @@ const onMouseEnter = useCallback(() => {
       setIsCollapsed(true)
     }
   }, [isPinned])
+
+  const isAuthenticated = authService.isAuthenticated();
+
+  const handleLogin = () => {
+    setIsQuickMenuOpen(false);
+    navigate("/auth");
+  };
   return (
     <>
       <div
@@ -367,16 +375,29 @@ const onMouseEnter = useCallback(() => {
                   {t("nav.home")}
                 </span>
               </button>
-              {/* Logout Button */}
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 transition-colors text-left"
-              >
-                <LogOut className="size-5 text-red-400" />
-                <span className="text-sm font-medium text-white">
-                  {t("nav.logout")}
-                </span>
-              </button>
+              {isAuthenticated ? (
+                /* Logout Button */
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-red-600/20 hover:bg-red-600/30 transition-colors text-left"
+                >
+                  <LogOut className="size-5 text-red-400" />
+                  <span className="text-sm font-medium text-white">
+                    {t("nav.logout")}
+                  </span>
+                </button>
+              ) : (
+                /* Login Button */
+                <button
+                  onClick={handleLogin}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 transition-colors text-left"
+                >
+                  <LogIn className="size-5 text-blue-400" />
+                  <span className="text-sm font-medium text-white">
+                    Đăng nhập
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         </>
