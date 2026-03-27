@@ -2,16 +2,22 @@ import React, { useState } from "react";
 import ReactFlagsSelect from "react-flags-select";
 import { useTranslation } from "react-i18next";
 
-export default function CountryDropdown({ className, onChange }) {
-  const [countryCode, setCountryCode] = useState("");
+interface CountryDropdownProps {
+  className?: string;
+  value?: string;
+  onChange?: (countryCode: string) => void;
+}
+
+export default function CountryDropdown({ className, value, onChange }: CountryDropdownProps) {
+  const [countryCode, setCountryCode] = useState<string>(value ?? "");
   const { t } = useTranslation();
 
-  const handleSelect = (code) => {
+  
+  
+  const handleSelect = (code: string) => {
     setCountryCode(code);
-    const translator = new Intl.DisplayNames(['en'], { type: 'region' });
-    const fullTextName = translator.of(code);
     if (onChange) {
-      onChange(fullTextName);
+      onChange(code);
     }
   };
 

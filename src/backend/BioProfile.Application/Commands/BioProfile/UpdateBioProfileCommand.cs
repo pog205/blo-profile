@@ -78,6 +78,9 @@ namespace BioProfile.Commands.BioProfile
                 case "iconscolor":
                     existBioProfile.IconsColor = request.FieldValue;
                     break;
+                case "location":
+                    existBioProfile.Location = request.FieldValue;
+                    break;
                 case "profileopacity":
                     if (double.TryParse(request.FieldValue, out double opacity))
                     {

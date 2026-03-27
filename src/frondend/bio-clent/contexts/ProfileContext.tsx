@@ -45,14 +45,17 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
   saveToApi,
 }) => {
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const immediateKeys: Array<keyof ProfileState> = ["location"];
 
   const handleProfileChange = useCallback(
     (key: keyof ProfileState, value: string | number, immediate = false) => {
+      const shouldSaveImmediately = immediate || immediateKeys.includes(key);
+
       // 1️⃣ Luôn update UI local trước
       setProfile((prev) => ({ ...prev, [key]: value }));
 
       // 2️⃣ Gọi API
-      if (immediate) {
+      if (shouldSaveImmediately) {
         // Xóa debounce cũ nếu có, rồi gọi ngay
         if (debounceRef.current) {
           clearTimeout(debounceRef.current);
@@ -60,13 +63,13 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
         }
         saveToApi(key, value);
       } else {
-        // Debounce 300ms
+        // Debounce cho text input và slider
         if (debounceRef.current) {
           clearTimeout(debounceRef.current);
         }
         debounceRef.current = setTimeout(() => {
           saveToApi(key, value);
-        },200);
+        }, 200);
       }
     },
     [setProfile, saveToApi]

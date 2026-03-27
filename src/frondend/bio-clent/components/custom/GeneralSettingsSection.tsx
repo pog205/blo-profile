@@ -135,7 +135,8 @@ const GeneralSettingsSection: React.FC = () => {
             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-500 z-10" />
             <CountryDropdown 
               className="w-full bg-[#12161d] border border-white/10 !h-12 !rounded-xl !py-3 !pl-10 pr-4 text-sm focus:outline-none focus:border-blue-500/50 text-white" 
-              onChange={(countryName) => handleProfileChange("location", countryName)} 
+              value={profile.location}
+              onChange={(countryCode) => handleProfileChange("location", countryCode)} 
             />
           </div>                 
         </div>
