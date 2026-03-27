@@ -21,7 +21,7 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ isNarrow }) => {
       icon: ImageIcon,
       text: t("custom.assets.profileBackgroundText"),
       type: "image",
-      name: "profileBackground",
+      name: "backgroundurl",
     },
     {
       label: t("custom.assets.backgroundAudio"),
@@ -35,14 +35,14 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ isNarrow }) => {
       icon: ImageIcon,
       text: t("custom.assets.profileAvatarText"),
       type: "image",
-      name: "profileAvatar",
+      name: "avatarurl",
     },
     {
       label: t("custom.assets.customCursor"),
       icon: MousePointer2,
       text: t("custom.assets.customCursorText"),
       type: "image",
-      name: "customCursor",
+      name: "mouseeffecturl",
     },
   ];
 

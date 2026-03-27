@@ -84,10 +84,12 @@ export const bioProfileService = {
       true
     );
   },
-  async uploadFile(file: File): Promise<string> {
+  async uploadFile(file: File, fileName?: string): Promise<string> {
+    const formData = new FormData();
+    formData.append('file', file, fileName ?? file.name);
     return apiService.post<string>(
       API_ENDPOINTS.bioProfile.uploadFile,
-      file,
+      formData,
       true
     );
   },

@@ -16,10 +16,16 @@ class ApiService {
   ): Promise<T> {
     const { requiresAuth = false, headers = {}, ...restOptions } = options;
 
+    const baseHeaders: Record<string, string> = { ...API_CONFIG.headers };
+    // When sending FormData, let the browser set the correct multipart boundary.
+    if (restOptions.body instanceof FormData) {
+      delete baseHeaders['Content-Type'];
+    }
+
     const config: RequestInit = {
       ...restOptions,
       headers: {
-        ...API_CONFIG.headers,
+        ...baseHeaders,
         ...(requiresAuth ? getAuthHeader() : {}),
         ...headers, // Headers truyền từ ngoài vào sẽ đè lên (hoặc thêm mới) ở đây
       },
@@ -62,9 +68,10 @@ class ApiService {
     requiresAuth = false,
     headers?: Record<string, string>
   ): Promise<T> {
+    const body = data instanceof FormData ? data : JSON.stringify(data);
     return this.request<T>(url, {
       method: 'POST',
-      body: JSON.stringify(data),
+      body,
       requiresAuth,
       headers,
     });
@@ -77,9 +84,10 @@ class ApiService {
     requiresAuth = false,
     headers?: Record<string, string>
   ): Promise<T> {
+    const body = data instanceof FormData ? data : JSON.stringify(data);
     return this.request<T>(url, {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body,
       requiresAuth,
       headers,
     });

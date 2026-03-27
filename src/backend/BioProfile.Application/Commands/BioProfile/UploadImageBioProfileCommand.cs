@@ -21,6 +21,11 @@ namespace BioProfile.Commands.BioProfile
         public async Task<string> Handle(UploadImageBioProfileCommad request, CancellationToken cancellationToken)
         {
             var fileId = await _fileStorageService.UploadFileAsync(request.FileStream, request.FileName, cancellationToken);
+            if (string.IsNullOrEmpty(fileId))
+            {
+                throw new Exception("Failed to upload file.");
+            }
+            
             return fileId;
         }
     }

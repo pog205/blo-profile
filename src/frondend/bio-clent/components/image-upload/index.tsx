@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Pencil, X } from "lucide-react";
+import { bioProfileService } from "@/services/bioprofile.service";
 
 interface ImageUploadProps {
     asset: {
@@ -16,15 +17,17 @@ const ImageUpload = ({ asset, i }: ImageUploadProps) => {
     const Icon = asset.icon;
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+    const [uploadedFileId, setUploadedFileId] = useState<string | null>(null);
 
     const allowedTypes: Record<string, string[]> = {
         image: ["image/jpeg", "image/png", "image/gif", "image/webp"],
         audio: ["audio/mpeg", "audio/wav", "audio/ogg"],
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        console.log(file);
         if (!file) return;
 
         const allowed = allowedTypes[asset.type] || [];
@@ -32,12 +35,24 @@ const ImageUpload = ({ asset, i }: ImageUploadProps) => {
             e.target.value = "";
             return;
         }
-        const ext = file.name.split('.').pop()
-        const formData = new FormData()
-        formData.append('file', file, `${asset.name}-${Date.now()}.${ext}`)
+        const ext = file.name.split('.').pop() ?? "bin";
+        const uploadFileName = `${asset.name}-${Date.now()}.${ext}`;
 
+        if (preview) URL.revokeObjectURL(preview);
         const url = URL.createObjectURL(file);
         setPreview(url);
+
+        setIsUploading(true);
+        setUploadError(null);
+        setUploadedFileId(null);
+        try {
+            const fileId = await bioProfileService.uploadFile(file, uploadFileName);
+            setUploadedFileId(fileId);
+        } catch (error) {
+            setUploadError(error instanceof Error ? error.message : "Upload failed");
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     const handleClick = () => {
@@ -55,6 +70,8 @@ const ImageUpload = ({ asset, i }: ImageUploadProps) => {
             URL.revokeObjectURL(preview);
         }
         setPreview(null);
+        setUploadedFileId(null);
+        setUploadError(null);
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
@@ -76,6 +93,7 @@ const ImageUpload = ({ asset, i }: ImageUploadProps) => {
                 <button
                     type="button"
                     onClick={handleClick}
+                    disabled={isUploading}
                     className="w-full h-32 bg-[#0d1117] border border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-3 hover:border-blue-500/50 hover:bg-blue-500/5 transition-all shadow-lg overflow-hidden"
                 >
                     {preview ? (
@@ -112,6 +130,12 @@ const ImageUpload = ({ asset, i }: ImageUploadProps) => {
                     </div>
                 )}
             </div>
+            {uploadError && (
+                <p className="text-[11px] text-red-400">{uploadError}</p>
+            )}
+            {uploadedFileId && !uploadError && (
+                <p className="text-[11px] text-emerald-400">Uploaded: {uploadedFileId}</p>
+            )}
         </div>
     );
 };
