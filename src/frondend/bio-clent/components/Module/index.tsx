@@ -14,12 +14,16 @@ const ColorPickerModal = ({
   onClosed,
 }: ColorPickerModalProps) => {
   
-  // Dùng thẳng biến initialColor làm giá trị mặc định
-  const [color, setColor] = useState(initialColor)
+
+  // Dùng tempColor cho UI, chỉ save khi mouse up
+  const [tempColor, setTempColor] = useState(initialColor)
 
   const handleColorChange = (newHex: string) => {
-    setColor(newHex)
-    onSave(newHex) // Gọi onSave để cập nhật màu ra ô input bên ngoài ngay lập tức
+    setTempColor(newHex) // chỉ update UI
+  }
+
+  const handleMouseUp = () => {
+    onSave(tempColor) // chỉ gọi 1 lần khi thả chuột
   }
 
   // Hàm tính màu chữ tương phản (Giữ nguyên của bạn)
@@ -34,20 +38,18 @@ const ColorPickerModal = ({
 
   return (
     <div className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
-      
       <div className="relative w-full max-w-sm bg-[#12161d] border border-white/10 rounded-2xl shadow-2xl p-6 mx-4">
-        
         <button 
-          onClick={onClosed} // Đóng thẳng luôn
+          onClick={onClosed}
           className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
         >
           <X className="size-5" />
         </button>
 
-        <div className="mb-6 pt-4">
+        <div className="mb-6 pt-4" onMouseUp={handleMouseUp}>
           {/* DÙNG HEX COLOR PICKER */}
           <HexColorPicker 
-            color={color} 
+            color={tempColor} 
             onChange={handleColorChange} 
             style={{ width: '100%', height: '200px' }} 
           />
@@ -58,8 +60,8 @@ const ColorPickerModal = ({
           <div
             className="size-10 rounded-full flex items-center justify-center font-bold text-sm shadow-inner shrink-0"
             style={{
-              backgroundColor: color,
-              color: getContrastTextColor(color),
+              backgroundColor: tempColor,
+              color: getContrastTextColor(tempColor),
             }}
           >
             A
@@ -67,13 +69,12 @@ const ColorPickerModal = ({
 
           <input
             type="text"
-            value={color.toUpperCase()}
+            value={tempColor.toUpperCase()}
             readOnly
             className="w-full bg-[#1a202c] border border-white/10 rounded-xl py-2.5 px-4 text-sm font-mono text-white focus:outline-none"
           />
         </div>
       </div>
-      
     </div>
   )
 }

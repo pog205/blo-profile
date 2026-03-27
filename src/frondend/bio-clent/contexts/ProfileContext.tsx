@@ -60,13 +60,13 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({
         }
         saveToApi(key, value);
       } else {
-        // Debounce 500ms
+        // Debounce 300ms
         if (debounceRef.current) {
           clearTimeout(debounceRef.current);
         }
         debounceRef.current = setTimeout(() => {
           saveToApi(key, value);
-        }, 500);
+        },200);
       }
     },
     [setProfile, saveToApi]
