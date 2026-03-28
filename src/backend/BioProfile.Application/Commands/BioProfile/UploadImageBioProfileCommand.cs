@@ -18,6 +18,11 @@ namespace BioProfile.Commands.BioProfile
     public class UploadImageBioProfileCommandHandler : ICommandHandler<UploadImageBioProfileCommad, string>
     {
         private readonly IFileStorageService _fileStorageService;
+
+        public UploadImageBioProfileCommandHandler(IFileStorageService fileStorageService)
+        {
+            _fileStorageService = fileStorageService;
+        }
         public async Task<string> Handle(UploadImageBioProfileCommad request, CancellationToken cancellationToken)
         {
             var fileId = await _fileStorageService.UploadFileAsync(request.FileStream, request.FileName, cancellationToken);

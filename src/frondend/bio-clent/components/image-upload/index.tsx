@@ -46,7 +46,7 @@ const ImageUpload = ({ asset, i }: ImageUploadProps) => {
         setUploadError(null);
         setUploadedFileId(null);
         try {
-            const fileId = await bioProfileService.uploadFile(file, uploadFileName);
+            const fileId = await bioProfileService.uploadFile(file, uploadFileName,);
             setUploadedFileId(fileId);
         } catch (error) {
             setUploadError(error instanceof Error ? error.message : "Upload failed");

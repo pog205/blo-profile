@@ -30,9 +30,16 @@ public class BioProfileController(
         if (file == null || file.Length == 0)
             return BadRequest("No file uploaded.");
         var result = await mediator.Send(new UploadImageBioProfileCommad(file.OpenReadStream(), file.FileName));
+        UpdateBioProfile(result);
         return Ok(result);
     }
-
+    private async Task UpdateBioProfile(string idFile)
+    {
+        var id = Request.Headers["id"].ToString();
+    var name = Request.Headers["name"].ToString();
+        await mediator.Send(new UpdateBioProfileCommand(id,name,idFile));
+        throw new NotImplementedException();
+    }
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetBioProfileUser([FromRoute] Guid userId)
     {

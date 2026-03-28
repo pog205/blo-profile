@@ -1,11 +1,13 @@
 ﻿using BioProfile.Application.Auth;
 using BioProfile.Domain.IRepositories;
 using BioProfile.Domain.Repositories;
+using BioProfile.Application.BioProfiles;
 using BioProfile.Infrastructure.Auth;
 using BioProfile.Infrastructure.Data;
 using BioProfile.Infrastructure.Data.Interceptors;
 
 using BioProfile.Infrastructure.Repositories;
+using BioProfile.Infrastructure.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -91,6 +93,7 @@ public static class DependencyInjection
 
         // Register services
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IFileStorageService, FileStorageService>();
 
         return services;
     }
