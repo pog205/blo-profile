@@ -37,7 +37,7 @@ public class BioProfileController(
     {
         var id = Request.Headers["id"].ToString();
     var name = Request.Headers["name"].ToString();
-        await mediator.Send(new UpdateBioProfileCommand(id,name,idFile));
+        await mediator.Send(new UpdateBioProfileCommand(Guid.Parse(id),name,idFile));
         throw new NotImplementedException();
     }
     [HttpGet("{userId:guid}")]
